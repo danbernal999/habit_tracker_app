@@ -1,0 +1,26 @@
+fastapi
+# Me permite crear endpoints (GET, POST, PUT, DELETE) de forma rápida, segura y con validación automática de datos.
+
+uvicorn
+# Es el servidor ASGI (Asynchronous Server Gateway Interface) que ejecuta la aplicación FastAPI. Este es como el "motor" que hace que la API funcione.
+
+sqlalchemy
+# Me permite trabajar con bases de datos (PostgreSQL, MySQL, SQLite, etc.) usando clases y objetos, sin escribir SQL directamente.
+
+pydantic
+# Se utiliza para validar y serializar datos. FastAPI lo usa para definir y validar los modelos de datos que se envían y reciben en la API.
+
+passlib[bcrypt]
+# Proporciona funciones para hashear y verificar contraseñas de manera segura, utilizando el algoritmo bcrypt.
+
+python-jose[cryptography]
+# Permite crear y verificar JSON Web Tokens (JWT), que son útiles para la autenticación y autorización en la API.
+
+python-multipart
+# Permite manejar datos de formularios y archivos enviados a través de solicitudes HTTP, como subir imágenes o documentos.
+
+email-validator
+# Se utiliza para validar direcciones de correo electrónico y asegurarse de que tengan un formato correcto.
+
+python-dotenv
+# Permite cargar variables de entorno desde un archivo .env, facilitando la configuración de la aplicación sin exponer datos sensibles en el código.

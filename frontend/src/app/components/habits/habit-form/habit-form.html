@@ -1,0 +1,20 @@
+<form>
+    <div>
+        <label for="habitName">Nombre del hábito:</label>
+        <input type="text" id="habitName" name="habitName" required>
+    </div>
+    <div>
+        <label for="habitFrequency">Frecuencia:</label>
+        <select id="habitFrequency" name="habitFrequency" required>
+            <option value="">Selecciona una frecuencia</option>
+            <option value="daily">Diario</option>
+            <option value="weekly">Semanal</option>
+            <option value="monthly">Mensual</option>
+        </select>
+    </div>
+    <div>
+        <label for="habitDescription">Descripción:</label>
+        <textarea id="habitDescription" name="habitDescription"></textarea>
+    </div>
+    <button type="submit">Guardar Hábito</button>
+</form>
