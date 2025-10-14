@@ -14,7 +14,6 @@ Aplicación full-stack para seguimiento de hábitos con backend en FastAPI y fro
 ### Frontend
 - Angular 19
 - Tailwind CSS
-- Dark Mode Design
 
 ### Instalación
 
@@ -22,7 +21,7 @@ Aplicación full-stack para seguimiento de hábitos con backend en FastAPI y fro
 
 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/habit-tracker.git
+git clone https://github.com/danbernal999/habit_tracker_app.git
 cd habit-tracker
 ```
 
@@ -72,13 +71,14 @@ habit_tracker/
 │   ├── schemas/             # Schemas de Pydantic
 │   ├── routers/             # Endpoints de la API
 │   └── database/            # Configuración de BD
-├── frontend/                # Frontend (Angular)
+├── frontend/                # Frontend (Angular + tailwind)
 │   └── src/
 │       └── app/
 │           └── components/  # Componentes de Angular
 ├── docker-compose.yml
 ├── Dockerfile
 ├── requirements.txt
+├── .env
 └── .env.example
 ```
 
