@@ -8,12 +8,29 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=sqlite:////tmp/habit_tracker.db
-      - SECRET_KEY=${SECRET_KEY:-default-secret-key-change-in-production}
+      - SECRET_KEY=${SECRET_KEY:key123}
     volumes:
       - ./app:/app/app
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sqlite3", "/tmp/habit_tracker.db", "SELECT 1;"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: always
     networks:
       - habit-tracker-network
+    command: >
+      bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" 
+
+  frontend:
+    build: ./frontend
+    container_name: habit-tracker-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    restart: always
 
 networks:
   habit-tracker-network:

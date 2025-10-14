@@ -37,5 +37,4 @@ class Record(Base):
     completed = Column(Boolean, default=False)
     notes = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
-    
     habit = relationship("Habit", back_populates="records")

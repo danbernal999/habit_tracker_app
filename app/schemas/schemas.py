@@ -17,6 +17,10 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
+class UserLogin(BaseModel):
+    username: EmailStr
+    password: str
+
 # Habit Schemas
 class HabitBase(BaseModel):
     name: str

@@ -30,7 +30,7 @@ def create_record(record: schemas.RecordCreate, db: Session = Depends(get_db)):
         habit = db.query(models.Habit).filter(models.Habit.id == record.habit_id).first()
         if not habit:
             logger.warning(f"Hábito no encontrado: {record.habit_id}")
-            raise HTTPException(status_code=404, detail="Habit not found")
+            raise HTTPException(status_code=404, detail="Habitos no funcional")
         
         # Verificar si ya existe un registro para esa fecha
         existing_record = db.query(models.Record).filter(
@@ -40,7 +40,7 @@ def create_record(record: schemas.RecordCreate, db: Session = Depends(get_db)):
         
         if existing_record:
             logger.warning(f"Ya existe un registro para el hábito {record.habit_id} en la fecha {record.date}")
-            raise HTTPException(status_code=400, detail="Record for this date already exists")
+            raise HTTPException(status_code=400, detail="Record exitente para esta fecha")
         
         # Crear el registro
         db_record = models.Record(**record.dict())
@@ -56,7 +56,7 @@ def create_record(record: schemas.RecordCreate, db: Session = Depends(get_db)):
     except Exception as e:
         logger.error(f"Error al crear registro: {str(e)}")
         db.rollback()
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 @router.get("/habit/{habit_id}", response_model=List[schemas.Record])
 def get_habit_records(habit_id: int, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -74,7 +74,7 @@ def get_habit_records(habit_id: int, skip: int = 0, limit: int = 100, db: Sessio
         habit = db.query(models.Habit).filter(models.Habit.id == habit_id).first()
         if not habit:
             logger.warning(f"Hábito no encontrado: {habit_id}")
-            raise HTTPException(status_code=404, detail="Habit not found")
+            raise HTTPException(status_code=404, detail="Habitos no funcional")
         
         records = db.query(models.Record).filter(
             models.Record.habit_id == habit_id
@@ -87,7 +87,7 @@ def get_habit_records(habit_id: int, skip: int = 0, limit: int = 100, db: Sessio
         raise
     except Exception as e:
         logger.error(f"Error al obtener registros: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 @router.get("/{record_id}", response_model=schemas.Record)
 def get_record(record_id: int, db: Session = Depends(get_db)):
@@ -102,7 +102,7 @@ def get_record(record_id: int, db: Session = Depends(get_db)):
         record = db.query(models.Record).filter(models.Record.id == record_id).first()
         if record is None:
             logger.warning(f"Registro no encontrado: {record_id}")
-            raise HTTPException(status_code=404, detail="Record not found")
+            raise HTTPException(status_code=404, detail="Record no funcional")
         
         logger.info(f"Registro encontrado (ID: {record_id})")
         return record
@@ -111,7 +111,7 @@ def get_record(record_id: int, db: Session = Depends(get_db)):
         raise
     except Exception as e:
         logger.error(f"Error al obtener registro: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 @router.put("/{record_id}", response_model=schemas.Record)
 def update_record(record_id: int, completed: bool, notes: str = None, db: Session = Depends(get_db)):
@@ -128,7 +128,7 @@ def update_record(record_id: int, completed: bool, notes: str = None, db: Sessio
         db_record = db.query(models.Record).filter(models.Record.id == record_id).first()
         if db_record is None:
             logger.warning(f"Registro no encontrado: {record_id}")
-            raise HTTPException(status_code=404, detail="Record not found")
+            raise HTTPException(status_code=404, detail="Record no funcional")
         
         # Actualizar campos
         db_record.completed = completed
@@ -146,4 +146,4 @@ def update_record(record_id: int, completed: bool, notes: str = None, db: Sessio
     except Exception as e:
         logger.error(f"Error al actualizar registro: {str(e)}")
         db.rollback()
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")

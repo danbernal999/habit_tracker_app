@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from typing import List
-import logging
-from app.database.config import get_db
-from app.models import models
-from app.schemas import schemas
+from fastapi import APIRouter, Depends, HTTPException, status   # Importar APIRouter
+from sqlalchemy.orm import Session                              # Importar Session para manejar la base de datos        
+from typing import List                                         # Importar List para tipado
+import logging                                                  # Importar logging para registrar eventos
+from app.database.config import get_db                          # Importar función para obtener la sesión de la base de datos
+from app.models import models                                   # Importar modelos de la base de datos
+from app.schemas import schemas                                 # Importar esquemas Pydantic
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)

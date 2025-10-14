@@ -33,14 +33,14 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         # Verificar si el email ya existe
         db_user = db.query(models.User).filter(models.User.email == user.email).first()
         if db_user:
-            logger.warning(f"Email ya registrado: {user.email}")
+            logger.warning(f"Correo ya registrado: {user.email}")
             raise HTTPException(status_code=400, detail="Correo Registrado")
         
         # Verificar si el username ya existe
         db_user = db.query(models.User).filter(models.User.username == user.username).first()
         if db_user:
-            logger.warning(f"Username ya registrado: {user.username}")
-            raise HTTPException(status_code=400, detail="Username already registered")
+            logger.warning(f"Usuario ya registrado: {user.username}")
+            raise HTTPException(status_code=400, detail="usuario Registrado")
         
         # Crear el usuario
         hashed_password = get_password_hash(user.password)
@@ -61,7 +61,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     except Exception as e:
         logger.error(f"Error al crear usuario: {str(e)}")
         db.rollback()
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 @router.get("/", response_model=List[schemas.User])
 def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -78,7 +78,7 @@ def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
         return users
     except Exception as e:
         logger.error(f"Error al obtener usuarios: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 @router.get("/{user_id}", response_model=schemas.User)
 def get_user(user_id: int, db: Session = Depends(get_db)):
@@ -93,7 +93,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
         
         if user is None:
             logger.warning(f"Usuario no encontrado: {user_id}")
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(status_code=404, detail="Usuario no funcional")
         
         logger.info(f"Usuario encontrado: {user.username}")
         return user
@@ -102,8 +102,48 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
         raise
     except Exception as e:
         logger.error(f"Error al obtener usuario: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
     
+
+# Rutas para autenticación (login) - Ejemplo con JWT
+from jose import JWTError, jwt
+
+SECRET_KEY = "keysecreta"
+ALGORITHM = "HS256"
+
+@router.post("/login")
+def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
+    """
+    Autenticar usuario y retornar un token JWT.
+    
+    - **email**: Correo electrónico del usuario
+    - **password**: Contraseña del usuario
+    """
+    try:
+        logger.info(f"Intentando autenticar usuario: {user.email}")
+        
+        db_user = db.query(models.User).filter(models.User.email == user.email).first()
+        if not db_user:
+            logger.warning(f"Usuario no encontrado: {user.email}")
+            raise HTTPException(status_code=400, detail="Credenciales inválidas")
+        
+        if not pwd_context.verify(user.password, db_user.hashed_password):
+            logger.warning(f"Contraseña incorrecta para usuario: {user.email}")
+            raise HTTPException(status_code=400, detail="credenciales inválidas")
+        
+        # Crear token JWT
+        token_data = {"sub": db_user.email}
+        token = jwt.encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
+        
+        logger.info(f"Usuario autenticado exitosamente: {user.email}")
+        return {"access_token": token, "token_type": "bearer"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error al autenticar usuario: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
+
 
 """ RESUMEN """
 
