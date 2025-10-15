@@ -7,14 +7,21 @@ uvicorn
 sqlalchemy
 # Me permite trabajar con bases de datos (PostgreSQL, MySQL, SQLite, etc.) usando clases y objetos, sin escribir SQL directamente.
 
+# ORM (Object-Relational Mapping) para interactuar con bases de datos
+psycopg2-binary
+
 pydantic
 # Se utiliza para validar y serializar datos. FastAPI lo usa para definir y validar los modelos de datos que se envían y reciben en la API.
+
+# Asegura las librerías de bases de datos y ORM
+python-jose[cryptography]
 
 passlib[bcrypt]
 # Proporciona funciones para hashear y verificar contraseñas de manera segura, utilizando el algoritmo bcrypt.
 
-python-jose[cryptography]
-# Permite crear y verificar JSON Web Tokens (JWT), que son útiles para la autenticación y autorización en la API.
+# Asegura las librerías de hashing de contraseñas
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.1.2  # Añadir explícitamente el paquete base de bcrypt
 
 python-multipart
 # Permite manejar datos de formularios y archivos enviados a través de solicitudes HTTP, como subir imágenes o documentos.

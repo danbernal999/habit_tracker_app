@@ -145,6 +145,8 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 
-""" RESUMEN """
 
-""" El archivo define rutas para crear usuarios, obtener todos los usuarios y obtener un usuario por ID usando FastAPI y SQLAlchemy. Incluye validaciones para evitar duplicados, maneja errores y registra eventos importantes con logging. Las contraseñas se almacenan de forma segura usando hashing """
+""" 
+El archivo define rutas para crear usuarios, obtener todos los usuarios y obtener un usuario por ID usando FastAPI y SQLAlchemy. Incluye validaciones para evitar duplicados, maneja errores y registra eventos importantes con logging. Las contraseñas se almacenan de forma segura usando hashing 
+
+"""

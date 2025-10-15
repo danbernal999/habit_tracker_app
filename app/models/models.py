@@ -11,7 +11,6 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
-    
     habits = relationship("Habit", back_populates="owner")
 
 class Habit(Base):
@@ -24,7 +23,6 @@ class Habit(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime, default=datetime.utcnow)
     is_active = Column(Boolean, default=True)
-    
     owner = relationship("User", back_populates="habits")
     records = relationship("Record", back_populates="habit")
 

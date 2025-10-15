@@ -7,10 +7,11 @@ from app.database.config import get_db
 from app.models import models
 from app.schemas import schemas
 
-# Configurar logging
+# Configuro el sistema de logs para registrar información, advertencias y errores
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Defino el router principal para esta parte del módulo, con el prefijo /records
 router = APIRouter(prefix="/records", tags=["records"])
 
 @router.post("/", response_model=schemas.Record, status_code=status.HTTP_201_CREATED)
@@ -42,7 +43,7 @@ def create_record(record: schemas.RecordCreate, db: Session = Depends(get_db)):
             logger.warning(f"Ya existe un registro para el hábito {record.habit_id} en la fecha {record.date}")
             raise HTTPException(status_code=400, detail="Record exitente para esta fecha")
         
-        # Crear el registro
+        # Si todo está bien, creo el nuevo registro
         db_record = models.Record(**record.dict())
         db.add(db_record)
         db.commit()
@@ -52,8 +53,10 @@ def create_record(record: schemas.RecordCreate, db: Session = Depends(get_db)):
         return db_record
         
     except HTTPException:
+        # Si ocurre un error controlado, lo relanzo sin modificarlo
         raise
     except Exception as e:
+        # Si ocurre algo inesperado, lo registro y hago rollback
         logger.error(f"Error al crear registro: {str(e)}")
         db.rollback()
         raise HTTPException(status_code=500, detail="Error interno del servidor")
@@ -70,12 +73,13 @@ def get_habit_records(habit_id: int, skip: int = 0, limit: int = 100, db: Sessio
     try:
         logger.info(f"Obteniendo registros del hábito ID: {habit_id}")
         
-        # Verificar que el hábito existe
+        # Verifico que el hábito exista antes de buscar sus registros
         habit = db.query(models.Habit).filter(models.Habit.id == habit_id).first()
         if not habit:
             logger.warning(f"Hábito no encontrado: {habit_id}")
             raise HTTPException(status_code=404, detail="Habitos no funcional")
         
+        # Consulto los registros de ese hábito ordenados por fecha descendente
         records = db.query(models.Record).filter(
             models.Record.habit_id == habit_id
         ).order_by(models.Record.date.desc()).offset(skip).limit(limit).all()
@@ -89,6 +93,7 @@ def get_habit_records(habit_id: int, skip: int = 0, limit: int = 100, db: Sessio
         logger.error(f"Error al obtener registros: {str(e)}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")
 
+#  Obtener un registro individual por su ID
 @router.get("/{record_id}", response_model=schemas.Record)
 def get_record(record_id: int, db: Session = Depends(get_db)):
     """
@@ -99,6 +104,7 @@ def get_record(record_id: int, db: Session = Depends(get_db)):
     try:
         logger.info(f"Buscando registro con ID: {record_id}")
         
+        # Busco el registro en la base de datos
         record = db.query(models.Record).filter(models.Record.id == record_id).first()
         if record is None:
             logger.warning(f"Registro no encontrado: {record_id}")
@@ -125,12 +131,13 @@ def update_record(record_id: int, completed: bool, notes: str = None, db: Sessio
     try:
         logger.info(f"Intentando actualizar registro ID: {record_id}")
         
+        # Busco el registro a actualizar
         db_record = db.query(models.Record).filter(models.Record.id == record_id).first()
         if db_record is None:
             logger.warning(f"Registro no encontrado: {record_id}")
             raise HTTPException(status_code=404, detail="Record no funcional")
         
-        # Actualizar campos
+        # Actualizo los campos 'completed' y 'notes' si se proporciona
         db_record.completed = completed
         if notes:
             db_record.notes = notes
