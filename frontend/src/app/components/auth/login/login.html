@@ -1,39 +1,72 @@
 <body class="h-full bg-black">
     <!-- Main container -->
     <div class="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img src="/Habit_Tracker_Logo.png" alt="Habit Tracker" class="mx-auto h-10 w-auto" />
-        <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Inicia sesión en tu cuenta</h2>
-    </div>
-
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form action="#" method="POST" class="space-y-6">
-        <div>
-            <label for="email" class="block text-sm/6 font-medium text-gray-100">Correo Electronico</label>
-            <div class="mt-2">
-            <input id="email" type="email" name="email" required autocomplete="email" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-500 sm:text-sm/6" />
-            </div>
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <img src="/Habit_Tracker_Logo.png" alt="Habit Tracker" class="mx-auto h-10 w-auto" />
+            <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Inicia sesión en tu cuenta</h2>
         </div>
 
-        <div>
-            <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm/6 font-medium text-gray-100">Contraseña</label>
-            <div class="text-sm">
-                <a href="#" class="font-semibold text-cyan-600 hover:text-cyan-400">Has olvidado tu contraseña?</a>
-            </div>
-            </div>
-            <div class="mt-2">
-            <input id="password" type="password" name="password" required autocomplete="current-password" class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-500 sm:text-sm/6" />
-            </div>
-        </div>
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <form action="#" method="POST" class="space-y-6" (ngSubmit)="onLogin()">
+                <!-- Correo Electronico -->
+                <div>
+                    <label for="email" class="block text-sm/6 font-medium text-gray-100">Correo Electronico</label>
+                    <div class="mt-2">
+                    <input 
+                        id="email" 
+                        type="email" 
+                        name="email" 
+                        [(ngModel)]="email" 
+                        required 
+                        placeholder="tu@email.com"
+                        autocomplete="email" 
+                        class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-500 sm:text-sm/6" />
+                    </div>
+                </div>
 
-        <div>
-            <button type="submit" class="flex w-full justify-center rounded-md bg-cyan-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-cyan-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500">Iniciar Sesion</button>
-        </div>
-        </form>
+                <!-- Contraseña -->
+                <div>
+                    <div class="flex items-center justify-between">
+                    <label for="password" class="block text-sm/6 font-medium text-gray-100">Contraseña</label>
+                    <div class="text-sm">
+                        <a href="#" class="font-semibold text-cyan-600 hover:text-cyan-400">Has olvidado tu contraseña?</a>
+                    </div>
+                    </div>
+                    <div class="mt-2">
+                    <input 
+                        id="password" 
+                        type="password" 
+                        name="password" 
+                        [(ngModel)]="password" 
+                        placeholder="********"
+                        required 
+                        autocomplete="current-password" 
+                        class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-500 sm:text-sm/6" />
+                    </div>
+                </div>
 
-        <p class="mt-10 text-center text-sm/6 text-gray-400">¿No eres miembro?
-            <a href="#" class="font-semibold text-cyan-600 hover:text-cyan-400">Prueba gratis de 14 días</a>
-        </p>
-    </div>
+                <!-- Mensaje Error -->
+                <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-900/50 border border-red-700 rounded-lg">
+                    <p class="text-sm text-red-300">{{ errorMessage }}</p>
+                </div>
+
+                <!-- Boton Iniciar Sesion -->
+                <div>
+                    <button 
+                        type="submit" 
+                        [disabled]="loading"
+                        class="flex w-full justify-center rounded-md bg-cyan-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-cyan-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500">
+                        <span *ngIf="!loading">Iniciar Sesión</span>
+                        <span *ngIf="loading" class="flex items-center"></span>
+                    </button>
+                </div>
+
+                <!-- Enlace Registro -->
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-400">¿No tienes cuenta?
+                        <a routerLink="/register" class="font-semibold text-cyan-600 hover:text-cyan-400">Regístrate aquí</a>
+                    </p>
+                </div>
+            </form>
+        </div>
     </div>

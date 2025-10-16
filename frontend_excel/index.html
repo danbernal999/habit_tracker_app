@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargador Masivo Excel</title>
+    <meta name="description" content="Interfaz para subir archivos Excel y mostrar progreso en tiempo real">
+    <meta name="author" content="Brayan Daniel Bernal lopez">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/732/732220.png" type="image/png">
+    <!-- TailwindCSS desde CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos de Heroicons -->
+    <script src="https://unpkg.com/@heroicons/react@2.0.13/24/outline/index.js"></script>
+    <style>
+        /* Animación personalizada para la barra de progreso */
+        @keyframes pulse-slow {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* Estilo para el área de arrastrar y soltar */
+        .drag-over {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    
+    <!-- Contenedor principal -->
+    <div class="container mx-auto px-4 py-8">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                📊 Cargador Masivo Excel
+            </h1>
+            <p class="text-gray-600">
+                Sube tu archivo Excel y observa el progreso en tiempo real
+            </p>
+        </div>
+        
+        <!-- Card principal -->
+        <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+            
+            <!-- Área de carga de archivos -->
+            <div class="p-8">
+                
+                <!-- Zona de arrastrar y soltar -->
+                <div id="dropZone" class="border-4 border-dashed border-gray-300 rounded-xl p-12 text-center transition-all duration-300 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
+                    
+                    <!-- Icono de archivo -->
+                    <div class="mb-4">
+                        <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">
+                        Arrastra tu archivo Excel aquí
+                    </h3>
+                    <p class="text-gray-500 mb-4">
+                        o haz clic para seleccionar
+                    </p>
+                    
+                    <!-- Input de archivo (oculto) -->
+                    <input 
+                        type="file" 
+                        id="fileInput" 
+                        accept=".xls,.xlsx" 
+                        class="hidden"
+                    >
+                    
+                    <!-- Botón para seleccionar archivo -->
+                    <button 
+                        onclick="document.getElementById('fileInput').click()" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
+                    >
+                        Seleccionar Archivo
+                    </button>
+                    
+                    <p class="text-sm text-gray-400 mt-4">
+                        Formatos soportados: .xls, .xlsx
+                    </p>
+                </div>
+                
+                <!-- Información del archivo seleccionado -->
+                <div id="fileInfo" class="hidden mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div>
+                                <p class="font-semibold text-gray-800" id="fileName">archivo.xlsx</p>
+                                <p class="text-sm text-gray-600" id="fileSize">0 KB</p>
+                            </div>
+                        </div>
+                        <button 
+                            onclick="clearFile()" 
+                            class="text-red-600 hover:text-red-800 font-semibold"
+                        >
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Botón de subir -->
+                <div class="mt-6">
+                    <button 
+                        id="uploadBtn" 
+                        onclick="uploadFile()" 
+                        disabled
+                        class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-green-500 disabled:hover:to-green-600"
+                    >
+                        <span id="uploadBtnText">Subir Excel</span>
+                    </button>
+                </div>
+                
+            </div>
+            
+            <!-- Barra de progreso -->
+            <div id="progressContainer" class="hidden px-8 pb-8">
+                
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-semibold text-gray-700">Progreso de carga</span>
+                        <span id="progressText" class="text-sm font-bold text-blue-600">0%</span>
+                    </div>
+                    
+                    <!-- Barra de progreso -->
+                    <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden shadow-inner">
+                        <div 
+                            id="progressBar" 
+                            class="bg-gradient-to-r from-blue-500 to-indigo-600 h-6 rounded-full transition-all duration-500 ease-out flex items-center justify-center"
+                            style="width: 0%"
+                        >
+                            <span class="text-xs font-bold text-white" id="progressBarText"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Estado del proceso -->
+                <div id="statusMessage" class="text-center">
+                    <div class="inline-flex items-center space-x-2 text-blue-600">
+                        <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="font-semibold">Procesando archivo...</span>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Mensaje de éxito -->
+            <div id="successMessage" class="hidden px-8 pb-8">
+                <div class="bg-green-50 border-2 border-green-500 rounded-lg p-6 text-center">
+                    <svg class="mx-auto h-16 w-16 text-green-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h3 class="text-2xl font-bold text-green-800 mb-2">
+                        ¡Archivo procesado exitosamente!
+                    </h3>
+                    <p class="text-green-700" id="successDetails">
+                        Se procesaron <span id="rowsProcessed" class="font-bold">0</span> filas
+                    </p>
+                    <button 
+                        onclick="resetForm()" 
+                        class="mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-300"
+                    >
+                        Cargar otro archivo
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mensaje de error -->
+            <div id="errorMessage" class="hidden px-8 pb-8">
+                <div class="bg-red-50 border-2 border-red-500 rounded-lg p-6 text-center">
+                    <svg class="mx-auto h-16 w-16 text-red-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h3 class="text-2xl font-bold text-red-800 mb-2">
+                        Error al procesar el archivo
+                    </h3>
+                    <p class="text-red-700" id="errorDetails">
+                        Ocurrió un error inesperado
+                    </p>
+                    <button 
+                        onclick="resetForm()" 
+                        class="mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-300"
+                    >
+                        Intentar nuevamente
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Footer con información adicional -->
+        <div class="max-w-3xl mx-auto mt-8 text-center text-gray-600">
+            <p class="text-sm">
+                💡 <strong>Tip:</strong> Asegúrate de que tu archivo Excel tenga datos en las primeras 5 columnas
+            </p>
+        </div>
+        
+    </div>
+    
+    <script>
+        // Variables globales
+        let selectedFile = null;
+        let websocket = null;
+        
+        // Referencias a elementos del DOM
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressBarText = document.getElementById('progressBarText');
+        const statusMessage = document.getElementById('statusMessage');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // Event listeners para drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+        
+        // Event listener para selección de archivo
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+        
+        /**
+         * Maneja la selección de un archivo
+         */
+        function handleFileSelect(file) {
+            // Valido que sea un archivo Excel
+            const validExtensions = ['.xls', '.xlsx'];
+            const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            
+            if (!validExtensions.includes(fileExtension)) {
+                alert('Por favor selecciona un archivo Excel válido (.xls o .xlsx)');
+                return;
+            }
+            
+            // Guardo el archivo seleccionado
+            selectedFile = file;
+            
+            // Muestro la información del archivo
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileInfo.classList.remove('hidden');
+            
+            // Habilito el botón de subir
+            uploadBtn.disabled = false;
+        }
+        
+        /**
+         * Formatea el tamaño del archivo en KB o MB
+         */
+        function formatFileSize(bytes) {
+            if (bytes < 1024) {
+                return bytes + ' B';
+            } else if (bytes < 1024 * 1024) {
+                return (bytes / 1024).toFixed(2) + ' KB';
+            } else {
+                return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+            }
+        }
+        
+        /**
+         * Limpia el archivo seleccionado
+         */
+        function clearFile() {
+            selectedFile = null;
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            uploadBtn.disabled = true;
+        }
+        
+        /**
+         * Sube el archivo al servidor
+         */
+        async function uploadFile() {
+            if (!selectedFile) {
+                alert('Por favor selecciona un archivo primero');
+                return;
+            }
+            
+            // Deshabilito el botón de subir
+            uploadBtn.disabled = true;
+            uploadBtn.querySelector('#uploadBtnText').textContent = 'Subiendo...';
+            
+            // Muestro el contenedor de progreso
+            progressContainer.classList.remove('hidden');
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            
+            // Conecto al WebSocket para recibir actualizaciones de progreso
+            connectWebSocket();
+            
+            // Creo un FormData con el archivo
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            
+            try {
+                // Envío el archivo al servidor
+                const response = await fetch('http://localhost:8000/excel/upload_excel', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Éxito: muestro el mensaje de éxito
+                    setTimeout(() => {
+                        progressContainer.classList.add('hidden');
+                        successMessage.classList.remove('hidden');
+                        document.getElementById('rowsProcessed').textContent = result.rows_processed;
+                    }, 1000);
+                } else {
+                    // Error: muestro el mensaje de error
+                    progressContainer.classList.add('hidden');
+                    errorMessage.classList.remove('hidden');
+                    document.getElementById('errorDetails').textContent = result.error || 'Error desconocido';
+                }
+            } catch (error) {
+                // Error de red
+                progressContainer.classList.add('hidden');
+                errorMessage.classList.remove('hidden');
+                document.getElementById('errorDetails').textContent = 'Error de conexión con el servidor';
+                console.error('Error:', error);
+            } finally {
+                // Cierro el WebSocket
+                if (websocket) {
+                    websocket.close();
+                }
+            }
+        }
+        
+        /**
+         * Conecta al WebSocket para recibir actualizaciones de progreso
+         */
+        function connectWebSocket() {
+            // Creo la conexión WebSocket
+            websocket = new WebSocket('ws://localhost:8000/excel/ws/progress');
+            
+            // Cuando se abre la conexión
+            websocket.onopen = () => {
+                console.log('WebSocket conectado');
+            };
+            
+            // Cuando recibo un mensaje (actualización de progreso)
+            websocket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                updateProgress(data.progress);
+            };
+            
+            // Cuando se cierra la conexión
+            websocket.onclose = () => {
+                console.log('WebSocket desconectado');
+            };
+            
+            // Cuando hay un error
+            websocket.onerror = (error) => {
+                console.error('Error en WebSocket:', error);
+            };
+        }
+        
+        /**
+         * Actualiza la barra de progreso
+         */
+        function updateProgress(progress) {
+            // Actualizo el ancho de la barra
+            progressBar.style.width = progress + '%';
+            
+            // Actualizo el texto del progreso
+            progressText.textContent = progress.toFixed(0) + '%';
+            progressBarText.textContent = progress.toFixed(0) + '%';
+            
+            // Si llegó al 100%, cambio el mensaje de estado
+            if (progress >= 100) {
+                statusMessage.innerHTML = `
+                    <div class="inline-flex items-center space-x-2 text-green-600">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="font-semibold">¡Proceso completado!</span>
+                    </div>
+                `;
+            }
+        }
+        
+        /**
+         * Reinicia el formulario para cargar otro archivo
+         */
+        function resetForm() {
+            // Limpio el archivo seleccionado
+            clearFile();
+            
+            // Oculto los mensajes
+            progressContainer.classList.add('hidden');
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            
+            // Reinicio la barra de progreso
+            progressBar.style.width = '0%';
+            progressText.textContent = '0%';
+            progressBarText.textContent = '';
+            
+            // Restauro el botón de subir
+            uploadBtn.querySelector('#uploadBtnText').textContent = 'Subir Excel';
+            
+            // Restauro el mensaje de estado
+            statusMessage.innerHTML = `
+                <div class="inline-flex items-center space-x-2 text-blue-600">
+                    <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="font-semibold">Procesando archivo...</span>
+                </div>
+            `;
+        }
+    </script>
+    
+</body>
+</html>

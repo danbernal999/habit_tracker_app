@@ -7,9 +7,8 @@ services:
     env_file:
       - .env
     environment:
-      # POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB se leen del archivo .env
       POSTGRES_USER: ${DB_USER}       
-      POSTGRES_PASSWORD: ${DB_PASSWORD} 
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}         
     volumes:
       # Este volumen asegura que los datos de la DB no se pierdan
@@ -18,8 +17,7 @@ services:
       - habit-tracker-network
     # AÑADIDO: Healthcheck para PostgreSQL
     healthcheck:
-      # Verifica el estado de la DB usando la herramienta pg_isready 
-      # Las variables de entorno POSTGRES_USER y POSTGRES_DB se usan aquí
+      # Usamos $$ para evitar warnings en el host
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
@@ -39,7 +37,13 @@ services:
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       SECRET_KEY: ${SECRET_KEY}
     volumes:
-      - ./app/main.py:/app/app/main.py
+      # CORRECCIÓN CLAVE: Usamos el mapeo de directorio completo para desarrollo 
+      # y aseguramos que esté en el formato de lista correcto.
+      - ./app:/app/app
+      # Volumen para archivos subidos (Excel)
+      - ./uploads:/app/uploads
+      # Volumen para el frontend del cargador de Excel
+      - ./frontend_excel:/app/frontend_excel 
     # ACTUALIZADO: El backend espera a que el servicio 'db' esté 'healthy'
     depends_on:
       db:
@@ -49,6 +53,7 @@ services:
       - habit-tracker-network
     command: >
       bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" 
+    
 
 # 3. REDES Y VOLÚMENES
 networks:

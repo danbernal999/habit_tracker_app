@@ -31,3 +31,15 @@ email-validator
 
 python-dotenv
 # Permite cargar variables de entorno desde un archivo .env, facilitando la configuración de la aplicación sin exponer datos sensibles en el código.
+
+pandas
+# Biblioteca para manipulación y análisis de datos, especialmente útil para leer y procesar archivos Excel.
+
+openpyxl
+# Motor para leer y escribir archivos Excel (.xlsx) usado por pandas.
+
+aiomysql
+# Driver asíncrono para MySQL, permite operaciones de base de datos no bloqueantes.
+
+websockets
+# Soporte para WebSockets, permite comunicación bidireccional en tiempo real entre cliente y servidor.
