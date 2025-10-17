@@ -1,10 +1,10 @@
-# 📊 Cargador Masivo Excel - Documentación Completa
+#  Cargador Masivo Excel - Documentación Completa
 
-## 🎯 Descripción
+##  Descripción
 
 Aplicación web moderna que permite subir archivos Excel (.xls o .xlsx), procesarlos en el backend con FastAPI, guardar los datos en PostgreSQL usando SQLAlchemy, y mostrar en el frontend una barra de progreso en tiempo real (de 0 a 100%) usando WebSockets.
 
-## 🏗️ Arquitectura
+##  Arquitectura
 
 ```
 habit_tracker/
@@ -20,10 +20,10 @@ habit_tracker/
 │   └── index.html             # Frontend con TailwindCSS
 ├── uploads/                   # Carpeta para archivos temporales
 ├── requirements.txt           # Dependencias Python
-└── ejemplo_excel.py          # Script para generar Excel de prueba
+└── ejemplo_excel.py           # Script para generar Excel de prueba
 ```
 
-## 🚀 Instalación y Configuración
+##  Instalación y Configuración
 
 ### 1. Instalar Dependencias
 
@@ -65,9 +65,9 @@ class ExcelData(Base):
     file_name = Column(String(255), nullable=True)
 ```
 
-**Nota:** Puedes personalizar los nombres de las columnas según tu Excel.
+**Nota:** Se Puede personalizar los nombres de las columnas según el tipo de Excel.
 
-## 🎮 Uso de la Aplicación
+##  Uso de la Aplicación
 
 ### 1. Iniciar el Servidor
 
@@ -95,6 +95,9 @@ python ejemplo_excel.py
 
 Esto creará un archivo `datos_ejemplo.xlsx` con 10 filas de datos de prueba.
 
+comando docker ->
+docker compose exec backend python ejemplo_excel.py
+
 ### 4. Subir el Archivo
 
 1. **Arrastra y suelta** el archivo Excel en la zona indicada, o haz clic en "Seleccionar Archivo"
@@ -102,7 +105,7 @@ Esto creará un archivo `datos_ejemplo.xlsx` con 10 filas de datos de prueba.
 3. Observa la **barra de progreso** que se actualiza en tiempo real
 4. Cuando termine, verás un mensaje de éxito con el número de filas procesadas
 
-## 📡 Endpoints de la API
+##  Endpoints de la API
 
 ### POST `/excel/upload_excel`
 
@@ -202,7 +205,7 @@ Elimina todos los datos cargados (útil para pruebas).
 }
 ```
 
-## 🔧 Personalización
+##  Personalización
 
 ### Adaptar el Modelo a tu Excel
 
@@ -267,7 +270,7 @@ const response = await fetch('http://localhost:8080/excel/upload_excel', {
 websocket = new WebSocket('ws://localhost:8080/excel/ws/progress');
 ```
 
-## 🧪 Pruebas
+##  Pruebas
 
 ### Probar con cURL
 
@@ -298,7 +301,7 @@ ws.onmessage = (event) => {
 };
 ```
 
-## 📊 Flujo de Datos
+##  Flujo de Datos
 
 ```
 1. Usuario selecciona archivo Excel
@@ -321,17 +324,17 @@ ws.onmessage = (event) => {
 8. Al terminar, muestra mensaje de éxito
 ```
 
-## 🎨 Características del Frontend
+##  Características del Frontend
 
-- ✅ **Drag & Drop**: Arrastra archivos directamente
-- ✅ **Validación**: Solo acepta archivos .xls y .xlsx
-- ✅ **Barra de progreso animada**: Con gradiente y transiciones suaves
-- ✅ **WebSocket en tiempo real**: Actualizaciones cada segundo
-- ✅ **Diseño responsive**: Se adapta a móviles y tablets
-- ✅ **Mensajes de estado**: Éxito, error y procesando
-- ✅ **TailwindCSS**: Diseño moderno y profesional
+-  **Drag & Drop**: Arrastra archivos directamente
+-  **Validación**: Solo acepta archivos .xls y .xlsx
+-  **Barra de progreso animada**: Con gradiente y transiciones suaves
+-  **WebSocket en tiempo real**: Actualizaciones cada segundo
+-  **Diseño responsive**: Se adapta a móviles y tablets
+-  **Mensajes de estado**: Éxito, error y procesando
+-  **TailwindCSS**: Diseño moderno y profesional
 
-## 🔒 Consideraciones de Seguridad
+##  Consideraciones de Seguridad
 
 1. **Validación de archivos**: Solo se aceptan archivos Excel
 2. **Tamaño máximo**: Considera agregar un límite de tamaño
@@ -339,7 +342,7 @@ ws.onmessage = (event) => {
 4. **Archivos temporales**: Se guardan en la carpeta `uploads/`
 5. **CORS**: Configurado para localhost (ajusta en producción)
 
-## 🚀 Despliegue en Producción
+##  Despliegue en Producción
 
 ### Consideraciones
 
@@ -355,14 +358,14 @@ ws.onmessage = (event) => {
 gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
 ```
 
-## 📝 Notas Adicionales
+##  Notas Adicionales
 
 - El modelo `ExcelData` es genérico con 5 columnas. Personalízalo según tus necesidades.
 - El progreso se almacena en memoria. Para múltiples workers, usa Redis.
 - Los archivos se guardan temporalmente en `uploads/`. Considera limpiarlos periódicamente.
 - El WebSocket se cierra automáticamente cuando el cliente se desconecta.
 
-## 🐛 Solución de Problemas
+##  Solución de Problemas
 
 ### Error: "DATABASE_URL no está configurada"
 
@@ -388,7 +391,7 @@ Verifica que:
 2. Verifica que el WebSocket esté conectado
 3. Asegúrate de que el archivo tenga suficientes filas para ver el progreso
 
-## 📚 Recursos
+##  Recursos
 
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Pandas Documentation](https://pandas.pydata.org/docs/)
@@ -396,6 +399,6 @@ Verifica que:
 - [TailwindCSS Documentation](https://tailwindcss.com/docs)
 - [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
 
-## 🎉 ¡Listo!
+##  ¡Listo!
 
-Tu aplicación de Cargador Masivo Excel está lista para usar. Disfruta procesando archivos Excel con progreso en tiempo real. 🚀
+La aplicación de Cargador Masivo Excel está lista para usar. Disfruta procesando archivos Excel con progreso en tiempo real. 

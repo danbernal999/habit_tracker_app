@@ -18,7 +18,7 @@ class User(UserBase):
         from_attributes = True
 
 class UserLogin(BaseModel):
-    username: EmailStr
+    email: EmailStr
     password: str
 
 # Habit Schemas
@@ -54,4 +54,6 @@ class Record(RecordBase):
     created_at: datetime
     
     class Config:
-        from_attributes = True                                             # Endpoint de salud
+        from_attributes = True 
+
+# Report Schemas

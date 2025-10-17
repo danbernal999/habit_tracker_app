@@ -15,11 +15,15 @@ if not SQLALCHEMY_DATABASE_URL:
     raise ValueError("DATABASE_URL no está configurada en el entorno.")
 
 # Creamos el engine
-# IMPORTANTE: Eliminamos connect_args={"check_same_thread": False}, 
-# ya que solo era necesario para SQLite.
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL
-)
+# Para SQLite, usamos connect_args para evitar errores de threading
+if "sqlite" in SQLALCHEMY_DATABASE_URL:
+    engine = create_engine(
+        SQLALCHEMY_DATABASE_URL,
+        connect_args={"check_same_thread": False}
+    )
+else:
+    # Para PostgreSQL u otras bases de datos
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 # Creamos la sesión
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

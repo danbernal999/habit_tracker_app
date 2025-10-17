@@ -1,0 +1,30 @@
+/* Excel Loader Component Styles */
+
+:host {
+  display: block;
+}
+
+/* Table styling */
+table {
+  border-collapse: collapse;
+}
+
+tbody tr:last-child {
+  border-bottom: 1px solid #d1d5db;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  table {
+    font-size: 0.875rem;
+  }
+
+  button {
+    font-size: 0.875rem;
+  }
+}

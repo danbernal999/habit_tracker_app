@@ -1,10 +1,15 @@
+import os
+from dotenv import load_dotenv
+
+# ⚠️ CRÍTICO: Cargar variables de entorno ANTES de cualquier otra importación
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.routers import user_routes, habit_routes, record_routes, excel_routes
 from app.database.config import engine, Base
 from app.models import models
-import os
 
 # Aquí importo todas las dependencias necesarias de FastAPI,
 # mis rutas personalizadas (users, habits y records),
@@ -28,7 +33,12 @@ app.include_router(excel_routes.router)
 # pueda comunicarse con esta API sin bloqueos del navegador.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200", "http://localhost:8000", "http://127.0.0.1:8000"],  # aquí puedo cambiar los dominios permitidos
+    allow_origins=[
+        "http://localhost", 
+        "http://localhost:4200", 
+        "http://localhost:8000",
+        "http://127.0.0.1",
+        "http://127.0.0.1:8000"],  # aquí puedo cambiar los dominios permitidos
     allow_credentials=True,
     allow_methods=["*"],  # permito todos los métodos HTTP (GET, POST, PUT, DELETE...)
     allow_headers=["*"],  # permito todos los encabezados
@@ -39,9 +49,6 @@ os.makedirs("frontend_excel", exist_ok=True)
 
 # Monto la carpeta de archivos estáticos para servir el HTML del cargador de Excel
 app.mount("/static", StaticFiles(directory="frontend_excel"), name="static")
-
-# (Este router de usuarios está incluido dos veces, pero con una sola basta.)
-app.include_router(user_routes.router)
 
 # Defino una ruta raíz (GET /) para comprobar fácilmente si el servidor está corriendo.
 @app.get("/")

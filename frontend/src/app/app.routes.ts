@@ -6,6 +6,7 @@ import { Dashboard } from './components/dashboard/dashboard';
 import { HabitList } from './components/habits/habit-list/habit-list';
 import { Calendar } from './components/calendar/calendar';
 import { Stats } from './components/stats/stats';
+import { ExcelLoader } from './components/excel-loader/excel-loader';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'habits/edit/:id', component: HabitForm },
   { path: 'calendar', component: Calendar },
   { path: 'stats', component: Stats },
+  { path: 'excel-loader', component: ExcelLoader },
   { path: '**', redirectTo: '/login' }
 ];

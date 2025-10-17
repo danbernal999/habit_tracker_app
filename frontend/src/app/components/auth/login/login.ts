@@ -33,7 +33,7 @@ export class Login {
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         console.log('Login exitoso:', response);
-        this.authService.saveToken('fake-token-123');
+        this.authService.saveToken(response.access_token);
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {

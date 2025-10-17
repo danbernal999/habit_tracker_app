@@ -1,20 +1,20 @@
 """
 Router para el Cargador Masivo de Excel
 Este módulo maneja la carga de archivos Excel, procesamiento con pandas,
-inserción en base de datos y comunicación en tiempo real vía WebSocket.
+ingresandolos en base de datos y comunicación en tiempo real vía WebSocket.
 """
 
-import os
-import asyncio
-from typing import Dict
-from datetime import datetime
-from fastapi import APIRouter, UploadFile, File, WebSocket, WebSocketDisconnect, Depends
-from fastapi.responses import JSONResponse
-from sqlalchemy.orm import Session
-import pandas as pd
+import os  # Para manejo de archivos y rutas
+import asyncio  # Para operaciones asíncronas y manejo de WebSockets
+from typing import Dict, List # Para anotaciones de tipos
+from datetime import datetime # Para manejar fechas y horas
+from fastapi import APIRouter, UploadFile, File, WebSocket, WebSocketDisconnect, Depends, HTTPException # FastAPI y dependencias
+from fastapi.responses import JSONResponse # Para respuestas JSON personalizadas
+from sqlalchemy.orm import Session # Para manejar sesiones de base de datos
+import pandas as pd # Para procesamiento de datos en Excel
 
-from app.database.config import get_db
-from app.models.models import ExcelData
+from app.database.config import get_db # Función para obtener la sesión de DB
+from app.models.models import ExcelData # Modelo para almacenar datos de Excel
 
 # Inicializo el router con un prefijo y etiqueta para organizar los endpoints
 router = APIRouter(prefix="/excel", tags=["Excel Upload"])
@@ -263,17 +263,120 @@ async def get_excel_data(
     }
 
 
+@router.get("/list-files")
+async def list_uploaded_files():
+    """
+    Endpoint GET para listar todos los archivos subidos en la carpeta uploads.
+    
+    Returns:
+        JSON con lista de archivos disponibles
+    """
+    try:
+        # Verifico que la carpeta existe
+        if not os.path.exists(UPLOAD_DIR):
+            return {
+                "files": [],
+                "count": 0,
+                "message": "La carpeta uploads no existe o está vacía"
+            }
+        
+        # Obtengo la lista de archivos
+        files = os.listdir(UPLOAD_DIR)
+        
+        # Filtro solo archivos (no carpetas)
+        file_list = []
+        for filename in files:
+            filepath = os.path.join(UPLOAD_DIR, filename)
+            if os.path.isfile(filepath):
+                # Obtengo el tamaño del archivo en bytes
+                file_size = os.path.getsize(filepath)
+                # Obtengo la fecha de modificación
+                modified_time = datetime.fromtimestamp(os.path.getmtime(filepath)).isoformat()
+                
+                file_list.append({
+                    "filename": filename,
+                    "size_bytes": file_size,
+                    "size_mb": round(file_size / (1024 * 1024), 2),
+                    "modified_at": modified_time
+                })
+        
+        return {
+            "files": file_list,
+            "count": len(file_list)
+        }
+    
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Error al listar archivos: {str(e)}"}
+        )
+
+
+@router.delete("/file/{filename}")
+async def delete_specific_file(filename: str):
+    """
+    Endpoint DELETE para eliminar un archivo específico de la carpeta uploads.
+    
+    Args:
+        filename: Nombre del archivo a eliminar (sin path)
+    
+    Returns:
+        JSON confirmando la eliminación
+    """
+    try:
+        # Sanitizo el filename para evitar ataques de path traversal
+        # Solo permito caracteres seguros
+        if "/" in filename or "\\" in filename or filename.startswith("."):
+            raise HTTPException(
+                status_code=400,
+                detail="Nombre de archivo inválido"
+            )
+        
+        filepath = os.path.join(UPLOAD_DIR, filename)
+        
+        # Verifico que el archivo existe
+        if not os.path.exists(filepath):
+            raise HTTPException(
+                status_code=404,
+                detail=f"Archivo no encontrado: {filename}"
+            )
+        
+        # Verifico que es un archivo, no una carpeta
+        if not os.path.isfile(filepath):
+            raise HTTPException(
+                status_code=400,
+                detail="La ruta especificada no es un archivo"
+            )
+        
+        # Elimino el archivo
+        os.remove(filepath)
+        
+        return {
+            "message": f"Archivo '{filename}' eliminado exitosamente",
+            "deleted_file": filename
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Error al eliminar archivo: {str(e)}"}
+        )
+
+
 @router.delete("/data")
 async def delete_all_data(db: Session = Depends(get_db)):
     """
-    Endpoint DELETE para eliminar todos los datos cargados.
-    Útil para limpiar la base de datos durante pruebas.
+    Endpoint DELETE para eliminar todos los datos cargados y archivos.
+    Limpia tanto la base de datos como la carpeta uploads.
+    Útil para limpiar completamente durante pruebas.
     
     Args:
         db: Sesión de base de datos
     
     Returns:
-        JSON con el número de registros eliminados
+        JSON con el número de registros y archivos eliminados
     """
     
     try:
@@ -284,9 +387,22 @@ async def delete_all_data(db: Session = Depends(get_db)):
         db.query(ExcelData).delete()
         db.commit()
         
+        # Elimino todos los archivos de la carpeta uploads
+        files_deleted = 0
+        if os.path.exists(UPLOAD_DIR):
+            for filename in os.listdir(UPLOAD_DIR):
+                filepath = os.path.join(UPLOAD_DIR, filename)
+                try:
+                    if os.path.isfile(filepath):
+                        os.remove(filepath)
+                        files_deleted += 1
+                except Exception as file_error:
+                    print(f"Error al eliminar archivo {filename}: {str(file_error)}")
+        
         return {
-            "message": "Datos eliminados exitosamente",
-            "deleted_count": count
+            "message": "Datos y archivos eliminados exitosamente",
+            "deleted_records": count,
+            "deleted_files": files_deleted
         }
     
     except Exception as e:
@@ -295,3 +411,6 @@ async def delete_all_data(db: Session = Depends(get_db)):
             status_code=500,
             content={"error": f"Error al eliminar datos: {str(e)}"}
         )
+    
+
+    

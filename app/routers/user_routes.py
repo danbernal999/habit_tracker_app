@@ -6,19 +6,28 @@ from app.database.config import get_db
 from app.models import models
 from app.schemas import schemas
 from passlib.context import CryptContext
+from jose import JWTError, jwt
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(
+    prefix="/users", 
+    tags=["users"]
+)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def get_password_hash(password):
+def get_password_hash(password: str):
+    if len(password.encode("utf-8")) > 72:
+        password = password[:72]
+    elif len(password.encode("utf-8")) < 8:
+        logger.warning(f"Contraseña demasiado corta: {password}")
+        raise HTTPException(status_code=400, detail="La contraseña debe tener al menos 8 caracteres")
     return pwd_context.hash(password)
 
-@router.post("/", response_model=schemas.User, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=schemas.User, status_code=status.HTTP_201_CREATED, operation_id="create_user_v1")
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     """
     Crear un nuevo usuario.
@@ -124,10 +133,18 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
         
         db_user = db.query(models.User).filter(models.User.email == user.email).first()
         if not db_user:
-            logger.warning(f"Usuario no encontrado: {user.email}")
+            logger.warning(f"Usuario no encontrado en BD: {user.email}")
+            # Debug: mostrar todos los usuarios registrados
+            all_users = db.query(models.User).all()
+            logger.info(f"Usuarios en BD: {[u.email for u in all_users]}")
             raise HTTPException(status_code=400, detail="Credenciales inválidas")
         
-        if not pwd_context.verify(user.password, db_user.hashed_password):
+        logger.info(f"Usuario encontrado: {db_user.email}")
+        logger.info(f"Verificando contraseña...")
+        password_valid = pwd_context.verify(user.password, db_user.hashed_password)
+        logger.info(f"¿Contraseña válida? {password_valid}")
+        
+        if not password_valid:
             logger.warning(f"Contraseña incorrecta para usuario: {user.email}")
             raise HTTPException(status_code=400, detail="credenciales inválidas")
         
