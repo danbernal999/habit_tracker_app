@@ -54,8 +54,21 @@ services:
     command: >
       bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" 
     
+  # 3. SERVICIO DE FRONTEND (ANGULAR + NGINX)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfilefront
+    container_name: habit-tracker-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - habit-tracker-network
 
-# 3. REDES Y VOLÚMENES
+# 4. REDES Y VOLÚMENES
 networks:
   habit-tracker-network:
     driver: bridge
