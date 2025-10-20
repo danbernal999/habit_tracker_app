@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-# ⚠️ CRÍTICO: Cargar variables de entorno ANTES de cualquier otra importación
+# CRÍTICO: Cargar variables de entorno ANTES de cualquier otra importación
 load_dotenv()
 
 from fastapi import FastAPI
@@ -53,7 +53,7 @@ app.mount("/static", StaticFiles(directory="frontend_excel"), name="static")
 # Defino una ruta raíz (GET /) para comprobar fácilmente si el servidor está corriendo.
 @app.get("/")
 def root():
-    return {"message": "🚀 Habit Tracker API funcionando correctamente"}
+    return {"message": "Bienvenido a la Habit Tracker API funcionando correctamente"}
 
 # Creo otra ruta (GET /health) que sirve como punto de verificación de salud del servicio.
 @app.get("/health")
