@@ -1,4 +1,4 @@
-# 🎯 Habit Tracker
+# Habit Tracker
 
 Aplicación full-stack para seguimiento de hábitos con backend en FastAPI y frontend en Angular.
 
@@ -7,7 +7,6 @@ Aplicación full-stack para seguimiento de hábitos con backend en FastAPI y fro
 ### Backend
 - FastAPI
 - SQLAlchemy
-- SQLite
 - Docker & Docker Compose
 - Python 3.11
 
@@ -63,7 +62,7 @@ ng serve
 
 La aplicación estará disponible en: `http://localhost:4200`
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 ```
 habit_tracker/
 ├── app/                      # Backend (FastAPI)
@@ -82,7 +81,7 @@ habit_tracker/
 └── .env.example
 ```
 
-## 🎨 Features
+##  Features
 
 - ✅ CRUD completo de usuarios y hábitos
 - ✅ Registro de completado diario
@@ -91,7 +90,7 @@ habit_tracker/
 - ✅ Docker containerizado
 - ✅ Manejo de errores y logging
 
-## 📝 API Endpoints
+##  API Endpoints
 
 - `POST /users/` - Crear usuario
 - `GET /users/` - Listar usuarios
@@ -100,6 +99,6 @@ habit_tracker/
 - `POST /records/` - Registrar completado
 - `GET /records/habit/{habit_id}` - Ver historial
 
-## 🔒 Licencia
+##  Licencia
 
 MIT
