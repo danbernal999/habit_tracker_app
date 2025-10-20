@@ -1,41 +1,80 @@
-<nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16">
+<nav>
+  <div class="max-w-7xl">
+    <div class="flex justify-between items-center h-16">
       <!-- Logo y nombre -->
       <div class="flex items-center">
-        <span class="text-2xl">🎯</span>
+        <span class="text-2xl"><img src="/Habit_Tracker_Logo.png" alt="" width="30px"></span>
         <span class="ml-2 text-xl font-bold text-white">Habit Tracker</span>
       </div>
 
       <!-- Links de navegación -->
-      <div class="hidden md:flex items-center space-x-4">
-        <a routerLink="/dashboard" routerLinkActive="bg-gray-800 text-purple-400" 
-           class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition">
+      <div class="hidden" [style.display]="'none'" style="display: none">
+        <a routerLink="/dashboard" 
+           routerLinkActive="router-link-active"
+           [routerLinkActiveOptions]="{ exact: true }">
           Dashboard
         </a>
-        <a routerLink="/habits" routerLinkActive="bg-gray-800 text-purple-400"
-           class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition">
+        <a routerLink="/habits" 
+           routerLinkActive="router-link-active">
           Mis Hábitos
         </a>
-        <a routerLink="/calendar" routerLinkActive="bg-gray-800 text-purple-400"
-           class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition">
+        <a routerLink="/calendar" 
+           routerLinkActive="router-link-active">
           Calendario
         </a>
-        <a routerLink="/stats" routerLinkActive="bg-gray-800 text-purple-400"
-           class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition">
+        <a routerLink="/stats" 
+           routerLinkActive="router-link-active">
           Estadísticas
         </a>
       </div>
 
+      <!-- Links en flex (visible en desktop) -->
+      <div class="flex items-center space-x-4" style="display: flex; gap: 1rem;">
+        <a routerLink="/dashboard" 
+           routerLinkActive="router-link-active"
+           [routerLinkActiveOptions]="{ exact: true }"
+           style="text-decoration: none;">
+          Dashboard
+        </a>
+        <a routerLink="/habits" 
+           routerLinkActive="router-link-active"
+           style="text-decoration: none;">
+          Mis Hábitos
+        </a>
+        <a routerLink="/calendar" 
+           routerLinkActive="router-link-active"
+           style="text-decoration: none;">
+          Calendario
+        </a>
+        <a routerLink="/stats" 
+           routerLinkActive="router-link-active"
+           style="text-decoration: none;">
+          Estadísticas
+        </a>
+        <a routerLink="/excel-loader" 
+           routerLinkActive="router-link-active"
+           style="text-decoration: none;">
+          Excel
+        </a>
+      </div>
+
       <!-- Usuario y logout -->
-      <div class="flex items-center space-x-4">
-        <button class="p-2 rounded-full hover:bg-gray-800 text-gray-400 hover:text-white transition">
+      <div class="flex items-center space-x-4" style="display: flex; gap: 1rem;">
+        <button class="p-2" type="button" title="Notificaciones">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+            </path>
           </svg>
         </button>
-        <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
-          Cerrar Sesión
+        
+        <button class="flex items-center space-x-2" type="button" style="display: flex; gap: 0.5rem;">
+          <span style="width: 2rem; height: 2rem; border-radius: 9999px; background: linear-gradient(135deg, #33eadb 0%, #7c3aed 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.875rem;">U</span>
+          <span style="color: #d1d5db; font-size: 0.875rem; display: none;">Usuario</span>
+        </button>
+        
+        <button class="logout-btn" type="button" style="padding: 0.5rem 1rem; background: #dc2626; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; font-weight: 500; transition: all 0.2s ease;">
+          Salir
         </button>
       </div>
     </div>
