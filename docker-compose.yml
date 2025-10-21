@@ -54,19 +54,22 @@ services:
     command: >
       bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" 
     
-  # 3. SERVICIO DE FRONTEND (ANGULAR + NGINX)
+  # 3. SERVICIO DE FRONTEND (ANGULAR)
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfilefront
     container_name: habit-tracker-frontend
     ports:
-      - "80:80"
+      - "4200:4200"
     depends_on:
       - backend
     restart: always
     networks:
       - habit-tracker-network
+    environment:
+      # Asegura que Angular se ejecute en modo producción en Docker
+      NODE_ENV: production
 
 # 4. REDES Y VOLÚMENES
 networks:
@@ -76,3 +79,4 @@ networks:
 volumes:
   # Define el volumen para PostgreSQL para persistencia
   postgres_data:
+    name: habit-tracker-postgres-data

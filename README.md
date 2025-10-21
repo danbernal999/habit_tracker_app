@@ -7,14 +7,25 @@ Aplicación full-stack para seguimiento de hábitos con backend en FastAPI y fro
 ### Backend
 - FastAPI
 - SQLAlchemy
+- PostgreSQL
+- Alembic
+- uvicorn
+- pyjwt
+- python-dotenv
+- requests
+- pytest
+- alembic
 - Docker & Docker Compose
 - Python 3.11
 
 ### Frontend
-- Angular 19
+- Angular 16
+- TypeScript
 - Tailwind CSS
 
 ### Instalación
+
+Para ejecutar este proyecto, necesitas tener instalados Docker y Docker Compose.
 
 ### Backend
 
@@ -43,7 +54,7 @@ docker compose down -v
 La API estará disponible en: `http://localhost:8000`
 Documentación: `http://localhost:8000/docs`
 
-### Frontend
+### Frontend (Angular 16)
 
 1. Ir a la carpeta frontend
 ```bash
@@ -57,10 +68,18 @@ npm install
 
 3. Ejecutar servidor de desarrollo
 ```bash
+npm start
+# O alternativa:
 ng serve
 ```
 
 La aplicación estará disponible en: `http://localhost:4200`
+
+4. Build para producción
+```bash
+npm run build
+# Genera archivos optimizados en: dist/frontend/browser/
+```
 
 ## Estructura del Proyecto
 ```
@@ -70,7 +89,7 @@ habit_tracker/
 │   ├── schemas/             # Schemas de Pydantic
 │   ├── routers/             # Endpoints de la API
 │   └── database/            # Configuración de BD
-├── frontend/                # Frontend (Angular + tailwind)
+├── frontend/                # Frontend (Angular + tailwind + CSS)
 │   └── src/
 │       └── app/
 │           └── components/  # Componentes de Angular
@@ -98,6 +117,58 @@ habit_tracker/
 - `GET /habits/` - Listar hábitos
 - `POST /records/` - Registrar completado
 - `GET /records/habit/{habit_id}` - Ver historial
+
+## 🚀 Deployment
+
+### Local con Docker Compose
+
+```bash
+# Full stack (Backend + Frontend + Database)
+docker-compose up -d
+
+# Frontend: http://localhost:4200
+# Backend: http://localhost:8000
+# API Docs: http://localhost:8000/docs
+```
+
+### AWS S3 (Frontend estático)
+
+```bash
+# Generar build optimizado
+cd frontend && npm run build
+
+# Subir a S3 (requiere AWS CLI)
+./deploy-s3.sh
+```
+
+### AWS EC2 (Full Stack)
+
+```bash
+# Deployment automático
+./deploy-ec2.sh <IP_INSTANCIA>
+```
+
+**Ver [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) para instrucciones detalladas**
+
+## ⚙️ Configuración
+
+### Backend (.env)
+
+```bash
+# Copiar template
+cp .env.example .env
+
+# Editar con tus valores:
+# - DATABASE_URL
+# - SECRET_KEY
+# - CORS settings
+```
+
+### Frontend
+
+Las URLs del backend se configuran en:
+- Desarrollo: `frontend/src/environments/environment.ts`
+- Producción: `frontend/src/environments/environment.prod.ts`
 
 ##  Licencia
 
