@@ -8,13 +8,15 @@ Aplicación full-stack para seguimiento de hábitos con backend en FastAPI y fro
 - FastAPI
 - SQLAlchemy
 - PostgreSQL
-- Alembic
 - uvicorn
-- pyjwt
+- pydantic
+- openpyxl
+- pandas
+- websockets
+- bcrypt
 - python-dotenv
-- requests
-- pytest
-- alembic
+- python-jose[cryptography]
+- passlib[bcrypt]
 - Docker & Docker Compose
 - Python 3.11
 
@@ -84,7 +86,7 @@ npm run build
 ## Estructura del Proyecto
 ```
 habit_tracker/
-├── app/                      # Backend (FastAPI)
+├── app/                     # Backend (FastAPI)
 │   ├── models/              # Modelos de base de datos
 │   ├── schemas/             # Schemas de Pydantic
 │   ├── routers/             # Endpoints de la API
@@ -118,7 +120,7 @@ habit_tracker/
 - `POST /records/` - Registrar completado
 - `GET /records/habit/{habit_id}` - Ver historial
 
-## 🚀 Deployment
+##  Deployment
 
 ### Local con Docker Compose
 
@@ -129,39 +131,6 @@ docker-compose up -d
 # Frontend: http://localhost:4200
 # Backend: http://localhost:8000
 # API Docs: http://localhost:8000/docs
-```
-
-### AWS S3 (Frontend estático)
-
-```bash
-# Generar build optimizado
-cd frontend && npm run build
-
-# Subir a S3 (requiere AWS CLI)
-./deploy-s3.sh
-```
-
-### AWS EC2 (Full Stack)
-
-```bash
-# Deployment automático
-./deploy-ec2.sh <IP_INSTANCIA>
-```
-
-**Ver [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) para instrucciones detalladas**
-
-## ⚙️ Configuración
-
-### Backend (.env)
-
-```bash
-# Copiar template
-cp .env.example .env
-
-# Editar con tus valores:
-# - DATABASE_URL
-# - SECRET_KEY
-# - CORS settings
 ```
 
 ### Frontend
