@@ -47,8 +47,3 @@ export class AuthService {
     localStorage.removeItem('auth_token');
   }
 }
-
-
-export class Auth {
-  
-}

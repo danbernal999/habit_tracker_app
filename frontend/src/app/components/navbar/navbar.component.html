@@ -1,43 +1,59 @@
-<nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16">
-      <!-- Logo y nombre -->
+<nav class="bg-gray-900 text-white shadow-md">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center h-16">
+      
+      <!-- Logo -->
       <div class="flex items-center">
-        <span class="text-2xl">🎯</span>
-        <span class="ml-2 text-xl font-bold text-white">Habit Tracker</span>
+        <img src="/Habit_Tracker_Logo.png" alt="Logo" class="w-8 h-8" />
+        <span class="ml-2 text-xl font-bold">Habit Tracker</span>
       </div>
 
-      <!-- Links de navegación -->
-      <div class="hidden md:flex items-center space-x-4">
-        <a routerLink="/dashboard" routerLinkActive="bg-gray-800 text-purple-400" 
-           class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition">
-          Dashboard
-        </a>
-        <a routerLink="/habits" routerLinkActive="bg-gray-800 text-purple-400"
-           class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition">
-          Mis Hábitos
-        </a>
-        <a routerLink="/calendar" routerLinkActive="bg-gray-800 text-purple-400"
-           class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition">
-          Calendario
-        </a>
-        <a routerLink="/stats" routerLinkActive="bg-gray-800 text-purple-400"
-           class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition">
-          Estadísticas
-        </a>
-      </div>
+      <!-- Enlaces visibles solo si el usuario está autenticado -->
+      <ng-container *ngIf="authService.inAuthenticated(); else guestLinks">
+        <div class="hidden md:flex items-center space-x-4">
+          <a routerLink="/dashboard" routerLinkActive="router-link-active" [routerLinkActiveOptions]="{ exact: true }">
+            Dashboard
+          </a>
+          <a routerLink="/habits" routerLinkActive="router-link-active">Mis Hábitos</a>
+          <a routerLink="/calendar" routerLinkActive="router-link-active">Calendario</a>
+          <a routerLink="/stats" routerLinkActive="router-link-active">Estadísticas</a>
+          <a routerLink="/excel-loader" routerLinkActive="router-link-active">Excel</a>
+        </div>
 
-      <!-- Usuario y logout -->
-      <div class="flex items-center space-x-4">
-        <button class="p-2 rounded-full hover:bg-gray-800 text-gray-400 hover:text-white transition">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-          </svg>
-        </button>
-        <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
-          Cerrar Sesión
-        </button>
-      </div>
+        <!-- Usuario + Logout -->
+        <div class="flex items-center space-x-4">
+          <!-- Notificaciones -->
+          <button class="p-2" title="Notificaciones">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+          </button>
+
+          <!-- Avatar -->
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-teal-400 to-purple-600 flex items-center justify-center font-bold">
+              U
+            </div>
+          </div>
+
+          <!-- Logout -->
+          <button 
+            (click)="logout()"
+            class="bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg text-sm font-medium transition">
+            Salir
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Enlaces para visitantes -->
+      <ng-template #guestLinks>
+        <div class="flex items-center space-x-4">
+          <a routerLink="/login" routerLinkActive="router-link-active">Iniciar sesión</a>
+          <a routerLink="/register" routerLinkActive="router-link-active">Registrarse</a>
+        </div>
+      </ng-template>
+
     </div>
   </div>
 </nav>

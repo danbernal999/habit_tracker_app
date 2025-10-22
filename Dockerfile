@@ -1,27 +1,29 @@
-# Imagen base
-FROM python:3.11
+FROM python:3.11-slim
 
-# Directorio de trabajo
 WORKDIR /app
 
-# 1. INSTALAR HERRAMIENTAS DE COMPILACIÓN
-# 'python-jose[cryptography]' requiere cabeceras de desarrollo y librerías de compilación (gcc, make)
-# para compilar el módulo cryptography de manera eficiente.
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    python3-dev \
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    curl \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar dependencias
+# Copiar requirements
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar código fuente
+# Instalar dependencias base
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir bcrypt==4.1.2 && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copiar el resto de la aplicación
 COPY . .
 
-# Exponer puerto
-EXPOSE 8000
+# Crear directorio para uploads si no existe
+RUN mkdir -p /app/uploads
 
-# Comando para ejecutar el servidor
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Comando para ejecutar la aplicación
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 

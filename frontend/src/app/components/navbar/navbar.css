@@ -1,0 +1,173 @@
+/* ========== NAVBAR STYLES ========== */
+nav {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border-bottom: 2px solid #374151;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.max-w-7xl {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.h-16 {
+    height: 4rem;
+}
+
+/* ========== LOGO SECTION ========== */
+nav > div > div > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-white {
+    color: #ffffff;
+}
+
+/* ========== NAVIGATION LINKS ========== */
+nav a {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #d1d5db;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: block;
+    white-space: nowrap;
+    position: relative;
+}
+
+nav a:hover {
+    background-color: rgba(31, 41, 55, 0.8);
+    color: #ffffff;
+}
+
+nav a.router-link-active {
+    background-color: rgba(31, 41, 55, 0.9);
+    color: #a78bfa;
+    font-weight: 600;
+}
+
+nav a.router-link-active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #a78bfa 0%, #7c3aed 100%);
+}
+
+/* ========== BUTTONS SECTION ========== */
+nav button {
+    background: transparent;
+    color: #9ca3af;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+nav button:hover:not(.logout-btn) {
+    background-color: rgba(31, 41, 55, 0.8);
+    color: #ffffff;
+    border-radius: 0.375rem;
+}
+
+.p-2 {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+}
+
+/* SVG Icons */
+nav svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 2;
+}
+
+/* ========== LOGOUT BUTTON ========== */
+.logout-btn {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.4);
+    transform: translateY(-1px);
+}
+
+.logout-btn:active {
+    transform: translateY(0);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    nav > div > div {
+        gap: 0.5rem;
+    }
+
+    nav a {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .text-2xl {
+        font-size: 1.25rem;
+    }
+
+    .text-xl {
+        font-size: 1rem;
+    }
+
+    nav svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}

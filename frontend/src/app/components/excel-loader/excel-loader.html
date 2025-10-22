@@ -1,12 +1,12 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4">
   <div class="container mx-auto max-w-5xl">
     
     <!-- Header -->
     <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-gray-800 mb-2">
-        📊 Cargador Masivo Excel
+      <h1 class="text-4xl font-bold text-white b-2">
+        Cargador Masivo Excel
       </h1>
-      <p class="text-gray-600">
+      <p class="text-gray-50 mt-2">
         Sube tu archivo Excel y observa el progreso en tiempo real
       </p>
     </div>
@@ -21,7 +21,7 @@
         [class.text-gray-700]="activeTab !== 'upload'"
         class="px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg"
       >
-        ⬆️ Cargar Excel
+        Cargar Excel
       </button>
       <button 
         (click)="switchTab('manage')"
@@ -31,7 +31,7 @@
         [class.text-gray-700]="activeTab !== 'manage'"
         class="px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg"
       >
-        📁 Gestionar Archivos
+        Gestionar Archivos
       </button>
     </div>
 
@@ -112,8 +112,8 @@
               [disabled]="!selectedFile || isUploading"
               class="w-full bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span *ngIf="!isUploading">⬆️ Subir Excel</span>
-              <span *ngIf="isUploading">📤 Cargando...</span>
+              <span *ngIf="!isUploading">Subir Excel</span>
+              <span *ngIf="isUploading">Cargando...</span>
             </button>
           </div>
 
@@ -176,7 +176,7 @@
       <!-- TAB: MANAGE FILES -->
       <ng-container *ngIf="activeTab === 'manage'">
         <div class="p-8">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">📁 Gestión de Archivos</h2>
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">Gestión de Archivos</h2>
           
           <!-- Loading -->
           <div *ngIf="isLoadingFiles" class="text-center py-8">
@@ -211,14 +211,14 @@
                       class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition"
                       title="Descargar"
                     >
-                      ⬇️
+                      Actualizar Datos
                     </button>
                     <button 
                       (click)="deleteFile(file.filename)"
                       class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition"
                       title="Eliminar"
                     >
-                      🗑️
+                      Eliminar
                     </button>
                   </td>
                 </tr>
@@ -226,7 +226,7 @@
             </table>
           </div>
 
-          <!-- Empty State -->
+          <!--  -->
           <div *ngIf="!isLoadingFiles && files.length === 0" class="text-center py-12">
             <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -235,9 +235,9 @@
             <p class="text-gray-400 text-sm mt-2">Sube un archivo Excel desde la pestaña anterior</p>
           </div>
 
-          <!-- Data Table (if files exist) -->
+          <!-- Pagination -->
           <div *ngIf="excelData.length > 0" class="mt-8">
-            <h3 class="text-xl font-bold text-gray-800 mb-4">📊 Datos Cargados</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Datos Cargados</h3>
             
             <div class="overflow-x-auto mb-6">
               <table class="w-full text-sm">
@@ -267,7 +267,7 @@
                 [disabled]="currentPage === 1"
                 class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50"
               >
-                ← Anterior
+                Anterior
               </button>
               
               <button 
@@ -288,7 +288,7 @@
                 [disabled]="currentPage === getTotalPages()"
                 class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50"
               >
-                Siguiente →
+                Siguiente
               </button>
             </div>
 
@@ -298,19 +298,19 @@
             </p>
           </div>
 
-          <!-- Action Buttons -->
+          <!--  -->
           <div *ngIf="files.length > 0" class="mt-8 flex gap-4 justify-center">
             <button 
               (click)="loadFiles()"
               class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-300"
             >
-              🔄 Actualizar
+              Actualizar
             </button>
             <button 
               (click)="deleteAllData()"
               class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-300"
             >
-              🗑️ Eliminar Todo
+              Eliminar Todo
             </button>
           </div>
 

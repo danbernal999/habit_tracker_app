@@ -1,8 +1,86 @@
-<div class="dashboard-container">
-    <h1>Panel de Hábitos</h1>
-    <div class="habits-list">
-        <!-- Aquí se mostrarán los hábitos del usuario -->
-        <p>No hay hábitos registrados aún.</p>
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6 md:p-8 lg:p-10">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">Panel de Hábitos</h1>
+            <p class="text-lg text-gray-300">Sigue tus hábitos diarios y alcanza tus metas</p>
+        </div>
+
+        <!-- Stats Grid - 4 KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <!-- Total Hábitos -->
+            <div class="bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-cyan-100 text-sm font-semibold mb-1">Total de Hábitos</p>
+                        <p class="text-4xl font-bold text-white">0</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Completados Hoy -->
+            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-100 text-sm font-semibold mb-1">Completados Hoy</p>
+                        <p class="text-4xl font-bold text-white">0</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Racha Actual -->
+            <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-red-100 text-sm font-semibold mb-1">Racha Actual</p>
+                        <p class="text-4xl font-bold text-white">0</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Porcentaje Completado -->
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm font-semibold mb-1">Progreso Hoy</p>
+                        <p class="text-4xl font-bold text-white">0%</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content - Hábitos o Empty State -->
+        <div class="bg-slate-800 bg-opacity-50 backdrop-blur rounded-xl p-8 shadow-xl border border-purple-500 border-opacity-20">
+            <!-- Empty State -->
+            <div class="flex flex-col items-center justify-center py-16 text-center">
+                
+                <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">No hay hábitos registrados aún</h2>
+                <p class="text-gray-300 text-lg mb-8 max-w-md">Crea tu primer hábito para comenzar a rastrear tu progreso y formar rutinas positivas</p>
+                
+                <!-- Create Habit Button -->
+                <button class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 active:scale-95 text-lg flex items-center gap-2">
+                    <span>+</span>
+                    <span>Crear Primer Hábito</span>
+                </button>
+            </div>
+
+            <!-- Habits List  -->
+            <div id="habits-container" class="hidden">
+                <div class="space-y-4">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Action Button (Mobile-Friendly) -->
+        <div class="mt-8 flex justify-center md:hidden">
+            <button class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 active:scale-95 w-full">
+                <span>+ Agregar Nuevo Hábito</span>
+            </button>
+        </div>
     </div>
-    <button class="add-habit-btn">Agregar nuevo hábito</button>
 </div>

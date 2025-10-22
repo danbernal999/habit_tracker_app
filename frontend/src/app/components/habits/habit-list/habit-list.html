@@ -1,1 +1,131 @@
-<p>habit-list works!</p>
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-white mb-2">Mis Hábitos</h1>
+      <p class="text-gray-300">Gestiona y monitorea todos tus hábitos diarios</p>
+    </div>
+
+    <!-- Button crear nuevo -->
+    <div class="mb-8 flex gap-4">
+      <button class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 flex items-center gap-2">
+        
+        <span>Crear Nuevo Hábito</span>
+      </button>
+    </div>
+
+    <!-- Hábitos Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- Card Hábito 1 -->
+      <div class="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 border border-gray-700 hover:border-cyan-500">
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h3 class="text-xl font-bold text-white">Correr</h3>
+            <p class="text-gray-400 text-sm">30 minutos cada día</p>
+          </div>
+          <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg text-sm flex items-center justify-center">edit</button>
+            <button class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg text-sm flex items-center justify-center">delete</button>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <div class="flex justify-between text-sm mb-2">
+            <span class="text-gray-300">Racha Actual</span>
+            <span class="text-cyan-400 font-bold">15 días</span>
+          </div>
+          <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+            <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full" style="width: 85%"></div>
+          </div>
+        </div>
+
+        <div class="flex gap-2 mb-4">
+          <span class="text-xs bg-cyan-600/20 text-cyan-400 px-3 py-1 rounded-full">Diario</span>
+          <span class="text-xs bg-green-600/20 text-green-400 px-3 py-1 rounded-full">Completado Hoy</span>
+        </div>
+
+        <button class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-2 rounded-lg font-semibold transition duration-300 flex items-center justify-center gap-2">
+          
+          <span>Marcar Completado</span>
+        </button>
+      </div>
+
+      <!-- Card Hábito 2 -->
+      <div class="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 border border-gray-700 hover:border-purple-500">
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            
+            <h3 class="text-xl font-bold text-white">Leer</h3>
+            <p class="text-gray-400 text-sm">20 páginas de un libro</p>
+          </div>
+          <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg text-sm flex items-center justify-center">edit</button>
+            <button class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg text-sm flex items-center justify-center">delete</button>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <div class="flex justify-between text-sm mb-2">
+            <span class="text-gray-300">Racha Actual</span>
+            <span class="text-purple-400 font-bold">8 días</span>
+          </div>
+          <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-full" style="width: 50%"></div>
+          </div>
+        </div>
+
+        <div class="flex gap-2 mb-4">
+          <span class="text-xs bg-purple-600/20 text-purple-400 px-3 py-1 rounded-full">Diario</span>
+          <span class="text-xs bg-yellow-600/20 text-yellow-400 px-3 py-1 rounded-full">Pendiente</span>
+        </div>
+
+        <button class="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white py-2 rounded-lg font-semibold transition duration-300 flex items-center justify-center gap-2">
+          
+          <span>Completar Ahora</span>
+        </button>
+      </div>
+
+      <!-- Card Hábito 3 -->
+      <div class="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 border border-gray-700 hover:border-green-500">
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            
+            <h3 class="text-xl font-bold text-white">Meditación</h3>
+            <p class="text-gray-400 text-sm">10 minutos cada mañana</p>
+          </div>
+          <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg text-sm flex items-center justify-center">edit</button>
+            <button class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg text-sm flex items-center justify-center">delete</button>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <div class="flex justify-between text-sm mb-2">
+            <span class="text-gray-300">Racha Actual</span>
+            <span class="text-green-400 font-bold">23 días</span>
+          </div>
+          <div class="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+            <div class="bg-gradient-to-r from-green-500 to-emerald-500 h-full" style="width: 95%"></div>
+          </div>
+        </div>
+
+        <div class="flex gap-2 mb-4">
+          <span class="text-xs bg-green-600/20 text-green-400 px-3 py-1 rounded-full">Diario</span>
+          <span class="text-xs bg-green-600/20 text-green-400 px-3 py-1 rounded-full">Completado Hoy</span>
+        </div>
+
+        <button class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-2 rounded-lg font-semibold transition duration-300 flex items-center justify-center gap-2">
+          
+          <span>Marcar Completado</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Estado Vacío (opcional para cuando no hay hábitos) -->
+    <div class="mt-12 text-center">
+      <p class="text-gray-400 text-sm flex items-center justify-center gap-2">¿No tienes hábitos? Crea uno para comenzar tu transformación</p>
+    </div>
+  </div>
+</div>

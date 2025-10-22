@@ -1,1 +1,168 @@
-<p>calendar works!</p>
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-white mb-2">Calendario de Hábitos</h1>
+      <p class="text-gray-300">Visualiza tu progreso diario y mantén la motivación</p>
+    </div>
+
+    <!-- Navegación de meses -->
+    <div class="flex justify-between items-center mb-8 bg-gray-800/50 backdrop-blur-sm p-4 rounded-lg border border-gray-700">
+      <button class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center gap-2">
+        
+        <span>Anterior</span>
+      </button>
+      <h2 class="text-2xl font-bold text-white">Octubre 2024</h2>
+      <button class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center gap-2">
+        <span>Siguiente</span>
+        
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Calendario Principal -->
+      <div class="lg:col-span-2">
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+          <!-- Días de la semana -->
+          <div class="grid grid-cols-7 gap-2 mb-4">
+            <div class="text-center text-gray-400 font-semibold py-2">Lun</div>
+            <div class="text-center text-gray-400 font-semibold py-2">Mar</div>
+            <div class="text-center text-gray-400 font-semibold py-2">Mié</div>
+            <div class="text-center text-gray-400 font-semibold py-2">Jue</div>
+            <div class="text-center text-gray-400 font-semibold py-2">Vie</div>
+            <div class="text-center text-gray-400 font-semibold py-2">Sáb</div>
+            <div class="text-center text-gray-400 font-semibold py-2">Dom</div>
+          </div>
+
+          <!-- Días del mes -->
+          <div class="grid grid-cols-7 gap-2">
+            <!-- Primeros días vacíos -->
+            <div class="aspect-square"></div>
+            
+            <!-- Días del mes -->
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">1</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-green-700 to-green-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-green-600 hover:to-green-700 transition duration-300" title="3/3 hábitos completados">
+              <span class="text-white font-semibold">2</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-green-700 to-green-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-green-600 hover:to-green-700 transition duration-300" title="3/3 hábitos completados">
+              <span class="text-white font-semibold">3</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-amber-700 to-amber-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-amber-600 hover:to-amber-700 transition duration-300" title="2/3 hábitos completados">
+              <span class="text-white font-semibold">4</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-green-700 to-green-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-green-600 hover:to-green-700 transition duration-300" title="3/3 hábitos completados">
+              <span class="text-white font-semibold">5</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">6</span>
+            </div>
+
+            <!-- Fila 2 -->
+            <div class="aspect-square bg-gradient-to-br from-green-700 to-green-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-green-600 hover:to-green-700 transition duration-300" title="3/3 hábitos completados">
+              <span class="text-white font-semibold">7</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-red-700 to-red-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-red-600 hover:to-red-700 transition duration-300" title="0/3 hábitos completados">
+              <span class="text-white font-semibold">8</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-green-700 to-green-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-green-600 hover:to-green-700 transition duration-300" title="3/3 hábitos completados">
+              <span class="text-white font-semibold">9</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-cyan-700 to-cyan-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300" title="Hoy">
+              <span class="text-white font-bold text-lg">10</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">11</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">12</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-green-700 to-green-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-green-600 hover:to-green-700 transition duration-300" title="3/3 hábitos completados">
+              <span class="text-white font-semibold">13</span>
+            </div>
+
+            <!-- Más días... -->
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">14</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">15</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">16</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">17</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-green-700 to-green-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-green-600 hover:to-green-700 transition duration-300" title="3/3 hábitos completados">
+              <span class="text-white font-semibold">18</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">19</span>
+            </div>
+            <div class="aspect-square bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:from-cyan-600 hover:to-cyan-700 transition duration-300">
+              <span class="text-white font-semibold">20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Lateral de Leyenda -->
+      <div class="space-y-4">
+        <!-- Estadísticas -->
+        <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700">
+          <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">Octubre</h3>
+          
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-gradient-to-br from-green-700 to-green-800 rounded"></div>
+                <span class="text-gray-300">Completado</span>
+              </div>
+              <span class="text-green-400 font-bold">12 días</span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-gradient-to-br from-amber-700 to-amber-800 rounded"></div>
+                <span class="text-gray-300">Parcial</span>
+              </div>
+              <span class="text-amber-400 font-bold">3 días</span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-gradient-to-br from-red-700 to-red-800 rounded"></div>
+                <span class="text-gray-300">Incompleto</span>
+              </div>
+              <span class="text-red-400 font-bold">1 día</span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-gradient-to-br from-gray-700 to-gray-800 rounded"></div>
+                <span class="text-gray-300">Sin completar</span>
+              </div>
+              <span class="text-gray-400 font-bold">14 días</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Racha Actual -->
+        <div class="bg-gradient-to-br from-cyan-900 to-blue-900 rounded-xl p-6 border border-cyan-700/50">
+          <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">Racha Actual</h3>
+          <p class="text-4xl font-bold text-cyan-400">15</p>
+          <p class="text-gray-300 text-sm">días seguidos</p>
+        </div>
+
+        <!-- Mejor racha -->
+        <div class="bg-gradient-to-br from-purple-900 to-pink-900 rounded-xl p-6 border border-purple-700/50">
+          <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">Mejor Racha</h3>
+          <p class="text-4xl font-bold text-purple-400">45</p>
+          <p class="text-gray-300 text-sm">días (Aug 2024)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

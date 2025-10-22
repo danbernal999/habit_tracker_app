@@ -1,45 +1,42 @@
-fastapi
-# Me permite crear endpoints (GET, POST, PUT, DELETE) de forma rápida, segura y con validación automática de datos.
+#Paquete | Versión | Uso | Compatibilidad
 
-uvicorn
-# Es el servidor ASGI (Asynchronous Server Gateway Interface) que ejecuta la aplicación FastAPI. Este es como el "motor" que hace que la API funcione.
+#Backend y API.	Compatible con Uvicorn y Pydantic 1.x.
+# Framework web
+fastapi==0.109.0
 
-sqlalchemy
-# Me permite trabajar con bases de datos (PostgreSQL, MySQL, SQLite, etc.) usando clases y objetos, sin escribir SQL directamente.
+# Servidor ASGI
+uvicorn[standard]==0.27.0
 
-# ORM (Object-Relational Mapping) para interactuar con bases de datos
-psycopg2-binary
+# ORM para DB
+sqlalchemy==2.0.25
 
-pydantic
-# Se utiliza para validar y serializar datos. FastAPI lo usa para definir y validar los modelos de datos que se envían y reciben en la API.
+# Driver de PostgreSQL
+psycopg2-binary==2.9.9
 
-# Asegura las librerías de bases de datos y ORM
-python-jose[cryptography]
+# Validación de datos
+pydantic==2.5.3
 
-passlib[bcrypt]
-# Proporciona funciones para hashear y verificar contraseñas de manera segura, utilizando el algoritmo bcrypt.
+# Tokens JWT
+python-jose[cryptography]==3.3.0
 
-# Asegura las librerías de hashing de contraseñas
-passlib[bcrypt]>=1.7.4
-bcrypt>=4.1.2  # Añadir explícitamente el paquete base de bcrypt
+# Hashing de contraseñas - VERSIONES ESPECÍFICAS 
+bcrypt==4.1.2
+passlib[bcrypt]==1.7.4
 
-python-multipart
-# Permite manejar datos de formularios y archivos enviados a través de solicitudes HTTP, como subir imágenes o documentos.
+# Manejo de archivos
+python-multipart==0.0.6
 
-email-validator
-# Se utiliza para validar direcciones de correo electrónico y asegurarse de que tengan un formato correcto.
+# Validación de email
+email-validator==2.1.0
 
-python-dotenv
-# Permite cargar variables de entorno desde un archivo .env, facilitando la configuración de la aplicación sin exponer datos sensibles en el código.
+# Variables de entorno
+python-dotenv==1.0.0
 
-pandas
-# Biblioteca para manipulación y análisis de datos, especialmente útil para leer y procesar archivos Excel.
+# Procesamiento de Excel
+pandas==2.1.4
 
-openpyxl
-# Motor para leer y escribir archivos Excel (.xlsx) usado por pandas.
+# Motor de lectura Excel
+openpyxl==3.1.2
 
-aiomysql
-# Driver asíncrono para MySQL, permite operaciones de base de datos no bloqueantes.
-
-websockets
-# Soporte para WebSockets, permite comunicación bidireccional en tiempo real entre cliente y servidor.
+# Comunicación en tiempo real
+websockets==12.0

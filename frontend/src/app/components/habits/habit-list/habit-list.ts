@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-habit-list',
+  standalone: true,
   imports: [],
   templateUrl: './habit-list.html',
-  styleUrl: './habit-list.css'
+  styleUrls: ['./habit-list.css']
 })
 export class HabitList {
 
