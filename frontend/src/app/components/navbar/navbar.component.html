@@ -23,24 +23,89 @@
         <!-- Usuario + Logout -->
         <div class="flex items-center space-x-4">
           <!-- Notificaciones -->
-          <button class="p-2" title="Notificaciones">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-            </svg>
-          </button>
+          <div class="relative">
+            <button 
+              class="p-2 rounded-full hover:bg-gray-800 transition relative"
+              title="Notificaciones"
+              (click)="toggleNotifications()"
+              type="button"
+              aria-haspopup="true"
+              [attr.aria-expanded]="showNotifications"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+              </svg>
+              <span *ngIf="unreadCount > 0" class="notification-badge" aria-label="Notificaciones sin leer">
+                {{ unreadCount }}
+              </span>
+            </button>
+
+            <div 
+              class="notification-panel"
+              *ngIf="showNotifications"
+              role="dialog"
+              aria-label="Listado de notificaciones"
+            >
+              <div class="notification-header">
+                <div>
+                  <p class="font-semibold text-white">Notificaciones</p>
+                  <p class="text-xs text-gray-400" *ngIf="unreadCount > 0">
+                    Tienes {{ unreadCount }} pendiente{{ unreadCount === 1 ? '' : 's' }}
+                  </p>
+                </div>
+                <button 
+                  class="text-xs text-cyan-400 hover:text-cyan-200 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                  (click)="markAllAsRead()"
+                  [disabled]="unreadCount === 0"
+                  type="button"
+                >
+                  Marcar todo como leído
+                </button>
+              </div>
+
+              <div class="notification-content" *ngIf="!loadingNotifications; else loadingNotificationsTpl">
+                <ng-container *ngIf="notifications.length > 0; else emptyNotificationsTpl">
+                  <button 
+                    class="notification-item"
+                    type="button"
+                    *ngFor="let notification of notifications"
+                    (click)="markAsRead(notification)"
+                    [class.unread]="!notification.is_read"
+                  >
+                    <span class="notification-title">{{ notification.title }}</span>
+                    <span class="notification-message">{{ notification.message }}</span>
+                    <span class="notification-date">{{ notification.created_at | date:'short' }}</span>
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #loadingNotificationsTpl>
+            <div class="notification-empty">
+              <span class="loading-spinner"></span>
+              <span>Cargando notificaciones...</span>
+            </div>
+          </ng-template>
+
+          <ng-template #emptyNotificationsTpl>
+            <div class="notification-empty">
+              <span>No tienes notificaciones</span>
+            </div>
+          </ng-template>
 
           <!-- Avatar -->
           <div class="flex items-center space-x-2">
             <div class="w-8 h-8 rounded-full bg-gradient-to-r from-teal-400 to-purple-600 flex items-center justify-center font-bold">
-              U
+              {{ userInitial }}
             </div>
           </div>
 
           <!-- Logout -->
           <button 
             (click)="logout()"
-            class="bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg text-sm font-medium transition">
+            class="logout-btn bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg text-sm font-medium transition">
             Salir
           </button>
         </div>

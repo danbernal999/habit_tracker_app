@@ -34,6 +34,9 @@ export class Login {
       next: (response) => {
         console.log('Login exitoso:', response);
         this.authService.saveToken(response.access_token);
+        if (response.user) {
+          this.authService.saveUser(response.user);
+        }
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {

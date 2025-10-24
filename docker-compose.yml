@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   # 1. SERVICIO DE BASE DE DATOS POSTGRESQL
   db:
@@ -11,18 +13,15 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}         
     volumes:
-      # Este volumen asegura que los datos de la DB no se pierdan
       - postgres_data:/var/lib/postgresql/data
     networks:
       - habit-tracker-network
-    # AÑADIDO: Healthcheck para PostgreSQL
     healthcheck:
-      # Usamos $$ para evitar warnings en el host
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s # Espera inicial para el arranque del proceso de la DB
+      start_period: 10s
 
   # 2. SERVICIO DE BACKEND (FASTAPI)
   backend:
@@ -33,18 +32,12 @@ services:
     env_file:
       - .env
     environment:
-      # Usa la URL de PostgreSQL, con el hostname 'db'
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       SECRET_KEY: ${SECRET_KEY}
     volumes:
-      # CORRECCIÓN CLAVE: Usamos el mapeo de directorio completo para desarrollo 
-      # y aseguramos que esté en el formato de lista correcto.
       - ./app:/app/app
-      # Volumen para archivos subidos (Excel)
       - ./uploads:/app/uploads
-      # Volumen para el frontend del cargador de Excel
       - ./frontend_excel:/app/frontend_excel 
-    # ACTUALIZADO: El backend espera a que el servicio 'db' esté 'healthy'
     depends_on:
       db:
         condition: service_healthy
@@ -52,8 +45,8 @@ services:
     networks:
       - habit-tracker-network
     command: >
-      bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload" 
-    
+      bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
   # 3. SERVICIO DE FRONTEND (ANGULAR)
   frontend:
     build:
@@ -68,15 +61,12 @@ services:
     networks:
       - habit-tracker-network
     environment:
-      # Asegura que Angular se ejecute en modo producción en Docker
       NODE_ENV: production
 
-# 4. REDES Y VOLÚMENES
 networks:
   habit-tracker-network:
     driver: bridge
 
 volumes:
-  # Define el volumen para PostgreSQL para persistencia
   postgres_data:
     name: habit-tracker-postgres-data

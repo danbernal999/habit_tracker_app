@@ -17,6 +17,7 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     
     habits = relationship("Habit", back_populates="owner")
+    notifications = relationship("Notification", back_populates="user")
 
 class Habit(Base):
     __tablename__ = "habits"
@@ -61,3 +62,16 @@ class ExcelData(Base):
     # Metadatos del registro
     uploaded_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     file_name = Column(String(255), nullable=True)  # Nombre del archivo de origen
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    title = Column(String(100), nullable=False)
+    message = Column(String(255), nullable=False)
+    is_read = Column(Boolean, default=False, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    user = relationship("User", back_populates="notifications")

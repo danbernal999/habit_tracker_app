@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8000'; 
+  private tokenKey = 'auth_token';
+  private userKey = 'auth_user';
 
   constructor(private http: HttpClient) { }
 
@@ -29,12 +31,12 @@ export class AuthService {
 
   // Manejo de Token
   saveToken(token: string): void {
-    localStorage.setItem('auth_token', token);
+    localStorage.setItem(this.tokenKey, token);
   }
 
   // Obtener Token
   getToken(): string | null {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem(this.tokenKey);
   }
 
   // Verificar si el usuario está autenticado
@@ -42,8 +44,29 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  // Guardar información del usuario
+  saveUser(user: { id: number; username: string; email: string }): void {
+    localStorage.setItem(this.userKey, JSON.stringify(user));
+  }
+
+  // Obtener información del usuario
+  getUser(): { id: number; username: string; email: string } | null {
+    const serialized = localStorage.getItem(this.userKey);
+    return serialized ? JSON.parse(serialized) : null;
+  }
+
+  getUserId(): number | null {
+    return this.getUser()?.id ?? null;
+  }
+
+  // Limpiar datos del usuario
+  clearUser(): void {
+    localStorage.removeItem(this.userKey);
+  }
+
   // Logout Usuario
   logout(): void {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem(this.tokenKey);
+    this.clearUser();
   }
 }

@@ -7,7 +7,7 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.routers import user_routes, habit_routes, record_routes, excel_routes
+from app.routers import user_routes, habit_routes, record_routes, excel_routes, notification_routes
 from app.database.config import engine, Base
 from app.models import models
 
@@ -28,6 +28,7 @@ app.include_router(user_routes.router)
 app.include_router(habit_routes.router)
 app.include_router(record_routes.router)
 app.include_router(excel_routes.router)
+app.include_router(notification_routes.router)
 
 # Configuro CORS para permitir que mi frontend (por ejemplo, Angular en localhost:4200)
 # pueda comunicarse con esta API sin bloqueos del navegador.
