@@ -76,6 +76,16 @@
                     <span class="notification-title">{{ notification.title }}</span>
                     <span class="notification-message">{{ notification.message }}</span>
                     <span class="notification-date">{{ notification.created_at | date:'short' }}</span>
+                    <div class="notification-actions" *ngIf="notification.actions?.length">
+                      <button
+                        class="notification-action"
+                        type="button"
+                        *ngFor="let action of notification.actions"
+                        (click)="executeAction($event, action, notification)"
+                      >
+                        {{ action.label }}
+                      </button>
+                    </div>
                   </button>
                 </ng-container>
               </div>

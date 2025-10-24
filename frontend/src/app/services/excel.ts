@@ -16,10 +16,11 @@ export class ExcelService {
   /**
    * Subir archivo Excel
    */
-  uploadExcel(file: File): Observable<any> {
+  uploadExcel(file: File, userId?: number): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post(`${this.apiUrl}/excel/upload_excel`, formData);
+    const params: Record<string, string> = userId ? { user_id: String(userId) } : {};
+    return this.http.post(`${this.apiUrl}/excel/upload_excel`, formData, { params });
   }
 
   /**

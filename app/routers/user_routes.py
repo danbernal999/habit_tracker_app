@@ -7,6 +7,7 @@ from app.models import models
 from app.schemas import schemas
 from passlib.context import CryptContext
 from jose import JWTError, jwt
+import os
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -20,7 +21,7 @@ router = APIRouter(
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Constantes
-SECRET_KEY = "keysecreta"  # CAMBIAR ESTO en producción
+SECRET_KEY = os.getenv("SECRET_KEY", "keysecreta")  # CAMBIAR ESTO en producción
 ALGORITHM = "HS256"
 MAX_PASSWORD_LENGTH = 72
 

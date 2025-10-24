@@ -6,15 +6,17 @@ ingresandolos en base de datos y comunicación en tiempo real vía WebSocket.
 
 import os  # Para manejo de archivos y rutas
 import asyncio  # Para operaciones asíncronas y manejo de WebSockets
-from typing import Dict, List # Para anotaciones de tipos
+import logging  # Para registrar eventos y errores
+from typing import Dict, List, Optional # Para anotaciones de tipos
 from datetime import datetime # Para manejar fechas y horas
-from fastapi import APIRouter, UploadFile, File, WebSocket, WebSocketDisconnect, Depends, HTTPException # FastAPI y dependencias
+from fastapi import APIRouter, UploadFile, File, WebSocket, WebSocketDisconnect, Depends, HTTPException, Request # FastAPI y dependencias
 from fastapi.responses import JSONResponse # Para respuestas JSON personalizadas
 from sqlalchemy.orm import Session # Para manejar sesiones de base de datos
 import pandas as pd # Para procesamiento de datos en Excel
 
 from app.database.config import get_db # Función para obtener la sesión de DB
-from app.models.models import ExcelData # Modelo para almacenar datos de Excel
+from app.models.models import ExcelData, Notification, NotificationAction # Modelo para almacenar datos de Excel y notificaciones
+from jose import jwt, JWTError
 
 # Inicializo el router con un prefijo y etiqueta para organizar los endpoints
 router = APIRouter(prefix="/excel", tags=["Excel Upload"])
@@ -26,11 +28,43 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 # Variable global para almacenar el progreso actual (0-100)
 # En producción, considera usar Redis o una base de datos para múltiples workers
 upload_progress: Dict[str, float] = {"current": 0.0}
+logger = logging.getLogger(__name__)
+SECRET_KEY = os.getenv("SECRET_KEY", "keysecreta")
+ALGORITHM = "HS256"
+LEGACY_SECRET_KEY = "keysecreta"
+
+
+def _extract_user_id_from_request(request: Request) -> Optional[int]:
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return None
+
+    token = auth_header.split(" ", 1)[1]
+    secrets_to_try = [SECRET_KEY]
+    if LEGACY_SECRET_KEY not in secrets_to_try:
+        secrets_to_try.append(LEGACY_SECRET_KEY)
+
+    for secret in secrets_to_try:
+        try:
+            payload = jwt.decode(token, secret, algorithms=[ALGORITHM])
+            user_id = payload.get("user_id")
+            if user_id is not None:
+                try:
+                    return int(user_id)
+                except (TypeError, ValueError):
+                    return None
+        except JWTError:
+            continue
+
+    logger.warning("No fue posible decodificar el token JWT para obtener el user_id")
+    return None
 
 
 @router.post("/upload_excel")
 async def upload_excel(
+    request: Request,
     file: UploadFile = File(...),
+    user_id: Optional[int] = None,
     db: Session = Depends(get_db)
 ):
     """
@@ -53,6 +87,10 @@ async def upload_excel(
     
     # Reinicio el progreso al iniciar una nueva carga
     upload_progress["current"] = 0.0
+
+    # Intento extraer user_id del token si no se recibió como parámetro
+    if user_id is None:
+        user_id = _extract_user_id_from_request(request)
     
     # Valido que el archivo sea Excel
     if not file.filename.endswith(('.xls', '.xlsx')):
@@ -119,6 +157,36 @@ async def upload_excel(
         
         # Marco el progreso como completado
         upload_progress["current"] = 100.0
+
+        # Registrar notificación si se proporcionó un usuario
+        if user_id:
+            logger.info(f"Registrando notificación para user_id={user_id} por archivo {file.filename}")
+            try:
+                notification = Notification(
+                    user_id=user_id,
+                    title="Carga de Excel completada",
+                    message=f"El archivo '{file.filename}' se procesó correctamente.",
+                    is_read=False
+                )
+                notification.actions = [
+                    NotificationAction(
+                        action_type="download",
+                        label="Descargar archivo",
+                        payload=file.filename
+                    ),
+                    NotificationAction(
+                        action_type="delete",
+                        label="Eliminar archivo",
+                        payload=file.filename
+                    )
+                ]
+                db.add(notification)
+                db.commit()
+                db.refresh(notification)
+                notification.actions
+            except Exception as notification_error:
+                db.rollback()
+                logger.error(f"Error al registrar notificación: {notification_error}")
         
         # Elimino el archivo temporal (opcional)
         # os.remove(file_path)

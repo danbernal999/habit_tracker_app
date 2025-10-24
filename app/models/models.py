@@ -75,3 +75,21 @@ class Notification(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     user = relationship("User", back_populates="notifications")
+    actions = relationship(
+        "NotificationAction",
+        back_populates="notification",
+        cascade="all, delete-orphan"
+    )
+
+
+class NotificationAction(Base):
+    __tablename__ = "notification_actions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    notification_id = Column(Integer, ForeignKey("notifications.id"), nullable=False)
+    action_type = Column(String(50), nullable=False)
+    label = Column(String(100), nullable=False)
+    payload = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    notification = relationship("Notification", back_populates="actions")

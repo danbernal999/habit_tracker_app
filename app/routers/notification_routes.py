@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List
 import logging
 
@@ -25,7 +25,7 @@ def get_notifications(
     try:
         logger.info(f"Obteniendo notificaciones para el usuario {user_id}")
 
-        query = db.query(models.Notification).filter(models.Notification.user_id == user_id)
+        query = db.query(models.Notification).options(joinedload(models.Notification.actions)).filter(models.Notification.user_id == user_id)
         if not include_read:
             query = query.filter(models.Notification.is_read.is_(False))
 
@@ -71,9 +71,19 @@ def create_notification(notification: schemas.NotificationCreate, db: Session = 
             message=notification.message,
             is_read=notification.is_read
         )
+
+        for action in notification.actions:
+            db_notification.actions.append(
+                models.NotificationAction(
+                    action_type=action.action_type,
+                    label=action.label,
+                    payload=action.payload
+                )
+            )
         db.add(db_notification)
         db.commit()
         db.refresh(db_notification)
+        db_notification.actions  # Fuerza carga de acciones
 
         logger.info(f"Notificación creada para usuario {notification.user_id}")
         return db_notification
@@ -99,6 +109,7 @@ def mark_notification_as_read(notification_id: int, db: Session = Depends(get_db
         notification.is_read = True
         db.commit()
         db.refresh(notification)
+        notification.actions  # Fuerza la carga de acciones
         logger.info(f"Notificación {notification_id} marcada como leída")
         return notification
     except HTTPException:

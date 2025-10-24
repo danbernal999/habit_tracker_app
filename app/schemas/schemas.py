@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from datetime import date, datetime
 from typing import Optional, List
 
@@ -66,11 +66,35 @@ class NotificationBase(BaseModel):
 
 class NotificationCreate(NotificationBase):
     user_id: int
+    actions: List["NotificationActionCreate"] = Field(default_factory=list)
 
 class Notification(NotificationBase):
     id: int
     user_id: int
     created_at: datetime
+    actions: List["NotificationAction"] = Field(default_factory=list)
 
     class Config:
         from_attributes = True
+
+
+class NotificationActionBase(BaseModel):
+    action_type: str
+    label: str
+    payload: Optional[str] = None
+
+
+class NotificationActionCreate(NotificationActionBase):
+    pass
+
+
+class NotificationAction(NotificationActionBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+Notification.model_rebuild()
+NotificationCreate.model_rebuild()

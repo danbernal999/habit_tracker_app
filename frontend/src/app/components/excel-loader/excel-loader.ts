@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ExcelService } from '../../services/excel';
+import { AuthService } from '../../services/auth';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -37,7 +38,10 @@ export class ExcelLoader implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private excelService: ExcelService) {}
+  constructor(
+    private excelService: ExcelService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadFiles();
@@ -123,7 +127,9 @@ export class ExcelLoader implements OnInit, OnDestroy {
       });
 
     // Subir archivo
-    this.excelService.uploadExcel(this.selectedFile!)
+    const userId = this.authService.getUserId();
+
+    this.excelService.uploadExcel(this.selectedFile!, userId ?? undefined)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {

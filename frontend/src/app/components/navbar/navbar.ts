@@ -2,7 +2,8 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth';
 import { CommonModule } from '@angular/common';
-import { NotificationService, NotificationItem } from 'src/app/services/notification';
+import { NotificationService, NotificationItem, NotificationAction } from 'src/app/services/notification';
+import { ExcelService } from 'src/app/services/excel';
 import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 
@@ -25,7 +26,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     private router: Router,
     private notificationService: NotificationService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private excelService: ExcelService
   ) {}
 
   ngOnInit(): void {
@@ -120,6 +122,45 @@ export class NavbarComponent implements OnInit, OnDestroy {
         },
         error: (error) => console.error('No se pudo marcar todas como leídas:', error)
       });
+  }
+
+  executeAction(event: Event, action: NotificationAction, notification: NotificationItem): void {
+    event.stopPropagation();
+
+    switch (action.action_type) {
+      case 'download':
+        if (action.payload) {
+          this.excelService.downloadFile(action.payload);
+          if (!notification.is_read) {
+            this.markAsRead(notification);
+          }
+        }
+        break;
+      case 'delete':
+        if (action.payload && confirm(`¿Eliminar el archivo ${action.payload}?`)) {
+          this.excelService.deleteFile(action.payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: () => {
+                if (!notification.is_read) {
+                  this.notificationService
+                    .markAsRead(notification.id)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe({
+                      next: () => this.loadNotifications(),
+                      error: (error) => console.error('No se pudo marcar la notificación como leída:', error)
+                    });
+                } else {
+                  this.loadNotifications();
+                }
+              },
+              error: (error) => console.error('No se pudo eliminar el archivo:', error)
+            });
+        }
+        break;
+      default:
+        console.warn('Acción de notificación no soportada:', action.action_type);
+    }
   }
 
   logout(): void {

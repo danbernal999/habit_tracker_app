@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface NotificationAction {
+  id: number;
+  action_type: string;
+  label: string;
+  payload?: string;
+  created_at: string;
+}
+
 export interface NotificationItem {
   id: number;
   user_id: number;
@@ -9,6 +17,7 @@ export interface NotificationItem {
   message: string;
   is_read: boolean;
   created_at: string;
+  actions: NotificationAction[];
 }
 
 @Injectable({
