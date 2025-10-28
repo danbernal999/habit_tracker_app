@@ -1,14 +1,9 @@
 // Configuración para producción
-// IMPORTANTE: Ajusta estas URLs según tu deployment
+// IMPORTANTE: Ajusta la URL del backend según tu deployment en Railway
 
 export const environment = {
   production: true,
-  // Opción 1: Si uso S3 + API en otro servidor
-  // apiUrl: 'https://api.tu-dominio.com',
-  
-  // Opción 2: Si uso EC2 con todo (frontend + backend)
-  apiUrl: 'https://habit-tracker-ec2.herokuapp.com/api',
-  
-  // Opción 3: URL relativa (sirve para ambos casos)
-  // apiUrl: '/api',
+  // Reemplaza con la URL de tu backend en Railway
+  // Ej: https://habit-tracker-railway-1234.up.railway.app
+  apiUrl: 'https://tu-proyecto-railway.up.railway.app',
 };
