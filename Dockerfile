@@ -11,12 +11,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copiar requirements
-COPY requirements.txt .
+COPY backend-requirements.txt .
 
 # Instalar dependencias base
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir bcrypt==4.1.2 && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r backend-requirements.txt
 
 # Copiar el resto de la aplicación
 COPY . .
