@@ -29,8 +29,7 @@ app.include_router(habit_routes.router)
 app.include_router(record_routes.router)
 app.include_router(excel_routes.router)
 
-# Configuro CORS para permitir que mi frontend (por ejemplo, Angular en localhost:4200)
-# pueda comunicarse con esta API sin bloqueos del navegador.
+# Configuro CORS para permitir que mi frontend pueda comunicarse con esta API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -38,10 +37,12 @@ app.add_middleware(
         "http://localhost:4200", 
         "http://localhost:8000",
         "http://127.0.0.1",
-        "http://127.0.0.1:8000"],  # aquí puedo cambiar los dominios permitidos
+        "http://127.0.0.1:8000",
+        "https://tu-app.netlify.app",  # Reemplazar con tu URL real de Netlify (Ej: https://habit-tracker.netlify.app)
+    ],
     allow_credentials=True,
-    allow_methods=["*"],  # permito todos los métodos HTTP (GET, POST, PUT, DELETE...)
-    allow_headers=["*"],  # permito todos los encabezados
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Creo la carpeta para archivos estáticos si no existe
